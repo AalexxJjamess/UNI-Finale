@@ -7,6 +7,7 @@
 \usepackage{gensymb}
 \usepackage[margin=1.25in]{geometry}
 \usepackage[numbered,framed]{matlab-prettifier}
+\usepackage{tikz}
 
 \title{Sound Field Control with a Coaxial, Cardioid, Axisymmetric Loudspeaker}
 \author{Alex Booth, supervised by Jonathan Hargreaves\\ a.booth9@edu.salford.ac.uk}
@@ -35,10 +36,14 @@
     The directionality of a loudspeaker can be a definitive tool of active sound field control.
 
     BACKGROUND
+    An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the Universtiy of Salford.
+    This loudspeaker consists of a perspex cylindrical two-driver coupled cabinet with drivers mounted at either end of the cylinder, and a KEF Uni-Q mid-high driver mounted coaxially with the `front' end of the cylindrical body.
+    A diagram of the system is give in Fig.SPEAKER DIAGRAM.
+
 
     RESEARCH PROBLEM
     The main goal of the work described in this paper was to bring the axisymmetric, cardioid loudspeaker (ACL for the rest of this paper) into a physical testing environment, and from that testing environment, determine suitable signal processing to achieve optimal low-frequency cardioid directivity.
-
+    Attention was paid to previous work on the ACL, and facets of this previous work informs the signal processing investigated in this report.
     SIGNIFICANCE
     Once the ACL is brought to a working stage by this project, further investigation into it's suitability for sound field control and other applications can take place.
 
@@ -47,6 +52,8 @@
     Furthermore, the precise directivity predicted to be achieved by this loudspeaker may not have any current practical applications maybe?????
 
     STRUCTURE
+
+    THE SPEAKER ITSELF AND HOW EACH DRIVER PERFORMS
 
 
 
@@ -99,15 +106,29 @@
         However, gradient loudspeakers are still, relative to line arrays, uncommon.
         Cardioid subwoofer systems used in live audio are common implementations of gradient loudspeaker designs.
         These subwoofers can be sold as gradient loudspeakers themselves, often with switchable directivity patterns; audio engineers will also arrange standard, omnidirectional subwoofers into configurations that introduce a phase delay sufficient to create a cardioid directivity pattern~\cite{curtis2022cardioidsubs}.
+        Jordan Cheer elaborates on the use of a `two source line array', which in essence is an Olson-style directional gradient loudspeaker, stating: `Two-source line arrays have been used in a variety of applications to generate localised listening zones and have also been used as a constituent element of larger arrays to achieve sound field control more generally.'\cite{cheer2015robustness}.
 
+
+    \section{Loudspeaker Construction}
         The prototype ACL has each low-frequency driver mounted in a shared, acoustically coupled enclosure.
         Robustness and efficiency of an acoustically coupled two-source superdirective array, an ICSV22 paper by Jordan Cheer, elaborates on the benefits of such a shared enclosure \cite{cheer2015robustness}.
         Cheer acknowledges how a superdirective array of loudspeakers have `high sensitivity to uncertainties in the assumed response of the system', and that regularization of the powered signal driving units in an array can improve the `robustness to uncertainty'.
         However, he further notes that these measures may limit the directivity of a such a system; counterproductive to the designed purpose of a superdirective array.
         Robustness and efficiency thus sets out to investigate the robustness of acoustically coupled two-source superdirective loudspeaker, as opposed to the previously investigated non-interacting directional loudspeakers.
         Cheer finds, using a two-port model of loudspeaker behavior and derived simulations, that an uncoupled two-source array is `more significantly affected by response uncertainties than the coupled array', and thus the coupled array is more robust, avoiding the need for regularization.
-    
-    \section{Previous Work on this Loudspeaker Design}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{figs/cheerGraph.png}%
+            \caption{Cheer's plots comparing acoustically coupled and uncoupled loudspeaker systems.}\cite{cheer2015robustness}
+            \label{cheerGraph}
+        \end{figure}
+        Cheer's figure \textit{a} (Fig.\ref{cheerGraph}) shows that when a constraint (to use the same electrical power as the coupled array) is applied to an \textit{un}-coupled two-source superdirective loudspeaker it loses a significant degree of acoustic contrast.
+
+
+    \section{Quantifying Loudspeaker Directivity} 
+        When describing a new, `holographic' near-field method of loudspeaker directivity measurement, Wolfgang Klippel and Christian Bellmann elaborate on the use of spherical harmonics as constituent solutions to the Helmholtz equation \cite{klippel2016holographic}.
+        Whilst their paper focuses on the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments, the description of spherical harmonics
+        
         The project described in this dissertation builds on previous work not only by the supervisory but also by other (former) students of the University of Salford.
         During the COVID-19 lock-down period the acoustic properties of the prototype loudspeaker were modelled with computer simulations.
         Paul Vedier carried out these simulations as part of his Master's dissertation.
@@ -124,16 +145,6 @@
 
 
 
-    \section{Quantifying Loudspeaker Directivity}
-        When designing a loudspeaker to fit a certain directivity pattern, a metric to mathematically quantify the directivity in relation to
-        
-        When describing a new, `holographic' near-field method of loudspeaker directivity measurement, Wolfgang Klippel and Christian Bellmann elaborate on the use of spherical harmonics as constituent solutions to the Helmholtz equation \cite{klippel2016}.
-        Whilst their paper focuses on the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments, 
-
-
-
-
-
     
 
 
@@ -146,6 +157,7 @@
     \section{Spherical Harmonics as a Method of Describing Cardioid Directivity}
     \section{Phase and Time Relationships Between Drivers}
     \section{Digital Signal Processing and Filtering}
+
 
 
 \chapter{Methodology}
@@ -216,13 +228,13 @@
                     \label{hankel}
                 \end{split}
             \end{equation}
-            
             Conceptually, if the $a_0$ and $a_1$ coefficients are equal, the directivity pattern will be cardioid.
+            It should be noted that the response of the $a$ coefficients above 500Hz is mostly irrelevant, as the LF drivers will be filtered out in favour of the Mid-High, which has a favourably cardioid directivity.
+
             The frequency magnitude response of the correction filter was derived by algebraically solving for $\gamma$ across the frequency-domain magnitude of each drivers $a_0$ and $a_1$ coefficients.
             \begin{equation}
                 \gamma = \frac{a_{0f} - a_{1f}}{a_{1r} - a_{0r}}
             \end{equation}
-
             Each driver's $a_0$ and $a_1$ coefficients were derived using the initial frequency and directivity response measurements of the ASL.
             \begin{lstlisting}[style=Matlab-editor, gobble=16]
                 function [a0, a1] = Compute_a_coeff(p, beta, k, r)
@@ -231,27 +243,18 @@
                     h11 = -exp(1i .* k .* r) .* (((k.*r) + 1i)./((k.*r).^2));
 
                     % Computing a_0, a_1 coefficients:
-                    a0 = (pi ./ (2i .* k .* h01)) .* mean(p .* sin(beta),2);
-                    a1 = ((3 .* pi) ./ -(2 .* k .* h11)) .* mean(p .* sin(beta) .* cos(beta),2);
+                    a0 = (pi./(2i .* k .* h01)) .* mean(p.*sin(beta),2);
+                    a1 = ((3.*pi) ./ -(2.*k.*h11)) .* mean(p.*sin(beta).*cos(beta),2);
                 
                 end
             \end{lstlisting}
-        
+            Applying $\gamma$, the filter, to the rear LF woofer and recalculating the $a_0$ and $a_1$ coefficients for each driver gives a coefficient-over-frequency response shown in Fig.\ref{coeffsPredicted}.
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/coeffsPredicted.png}%
-                \caption{$a_0$ and $a_1$ coefficients remain equal across frequency after $\gamma$ is applied.}
+                \caption{$a_0$ and $a_1$ coefficients remain equal across frequency after $\gamma$ is applied to the measured coefficients.}
                 \label{coeffsPredicted}
             \end{figure}
-        Applying $\gamma$, the filter, to the rear LF woofer and recalculating the $a_0$ and $a_1$ coefficients for each driver gives a coefficient-over-frequency response shown in Fig.\ref{coeffsPredicted}.
-        \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.35]{figs/coeffsPredicted.png}%
-            \caption{$a_0$ and $a_1$ coefficients remain equal across frequency after $\gamma$ is applied.}
-            \label{coeffsPredicted}
-        \end{figure}
-
-
 
         \section{Correction Filter Implementation}
             The generated impulse response, shown in Fig.\ref{origImpulse}, is non-causal, with a substantial section wrapped back around $t=0$ to the end of the response.
