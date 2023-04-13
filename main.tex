@@ -14,7 +14,29 @@
 
 \begin{document}
 
-\maketitle
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{0.75\linewidth}
+    \centering
+%University logo
+    \includegraphics[width=0.75\linewidth]{figs/Logo.jpg} \\
+    \hrule
+    \vspace{3cm}
+%Thesis title
+    {\uppercase{\Large Sound Field Control with an Axissymetric, Cardioid Loudspeaker\par}}
+    \vspace{3cm}
+%Author's name
+    {\Large Alex Booth, supervised by Dr. Jonathan Hargreaves\par}
+    \vspace{3cm}
+%Degree
+    {\Large A dissertation submitted for the degree of Audio and Acoustical Engineering BEng.\par}
+    \vspace{3cm}
+%Date
+    {\Large May 2023}
+\end{minipage}
+\end{center}
+\clearpage
 
 \chapter*{Declaration}
 
@@ -39,6 +61,7 @@
     An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the Universtiy of Salford.
     This loudspeaker consists of a perspex cylindrical two-driver coupled cabinet with drivers mounted at either end of the cylinder, and a KEF Uni-Q mid-high driver mounted coaxially with the `front' end of the cylindrical body.
     A diagram of the system is give in Fig.SPEAKER DIAGRAM.
+
 
 
     RESEARCH PROBLEM
@@ -81,8 +104,6 @@
 
         Wave field synthesis is a particular technique of sound field control, where arrays of loudspeakers 
 
-
-
     \section{Directional Loudspeakers}
 
         Harry Olson's `Gradient Loudspeakers'~\cite{olson1973gradient} forms the theoretical foundation of controlling the directionality of emitted sound with multiple loudspeaker drivers.
@@ -123,6 +144,36 @@
             \label{cheerGraph}
         \end{figure}
         Cheer's figure \textit{a} (Fig.\ref{cheerGraph}) shows that when a constraint (to use the same electrical power as the coupled array) is applied to an \textit{un}-coupled two-source superdirective loudspeaker it loses a significant degree of acoustic contrast.
+        A BIT MORE HERE?
+        Considering Cheer's findings, prior to the work this dissertation describes, the ACL was constructed with an acoustically coupled main chamber for the LF drivers.
+
+        All the drivers used in the ACL are designed by KEF and used in their commercially available products, but in different cabinet configurations to the ACL.
+        However, KEF have a commercialy available ceiling-mounted loudspeaker that utilizes an LF driver with a Uni-Q coaxially mounted: The Ci250RRM-THX.
+        \begin{figure}[H]
+            \begin{minipage}{.49\textwidth}
+                \includegraphics[width=\linewidth]{figs/KEFpressure.png}%
+                \centering
+                \caption{}
+                \label{KEFpressure} \cite{KEFCi}
+            \end{minipage}
+            \begin{minipage}{.49\textwidth}
+                \includegraphics[width=\linewidth]{figs/KEFdiagram.png}%
+                \centering
+                \caption{ } \cite{KEFCi}
+                \label{KEFdiagram}
+        \end{minipage}
+        \end{figure}
+        KEF found that such a three-way loudspeaker design with the LF driver mounted in a cavity to the rear of the mid-high introduces resonances, determined by the size and shape of the cavity \cite{KEFCi}.
+        Figure \ref{KEFpressure} shows a dip in sound pressure between 800Hz to 1KHz; KEF remedy this by designing the Ci250RRM-THX to use an open-backed Uni-q midrange.
+        KEF call this `Cavity Radiation Control', and they show, in Fig. \ref{KEFopenback}, that the 30-plus dB cancellation around 800Hz to 1KHz is eliminated.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{figs/KEFopenback.png}
+            \caption{Changing the Uni-Q to an open back design.}\cite{KEFCi}
+            \label{KEFopenback}
+        \end{figure}
+        Whilst the model of LF driver and the cavity in which it is mounted in are different to the ACL, KEF's findings are applicable to the three-way coaxial design of the ACL and as such prompt further investigation into these `cavity resonances'.
+
 
 
     \section{Quantifying Loudspeaker Directivity} 
@@ -141,17 +192,6 @@
             \caption{FEM model of the ACL compared with Olson's first order unidirectional loudspeaker.}\cite{vedier}
             \label{vedierPolar}
         \end{figure}
-
-
-
-
-    
-
-
-
-
-
-
 
 \chapter{Key Theories}
     \section{Spherical Harmonics as a Method of Describing Cardioid Directivity}
@@ -196,10 +236,13 @@
             \caption{Noisy and anomalous data can be seen in the large blue and purple smears to the right. This data needed cleaning.}
             \label{allAngles}
         \end{figure}
+        Manually cycling through each angle's driver frequency responses, anomalous data was manually averaged out using it's nearest angle neighbors.
+
+
 
     
     \section{Rear Driver Correction Filter Design}
-        \section{Theory}
+        \subsection{Theory}
             The radiation of the rear driver of the ASL needs to have a particular phase relationship to radiation of the front driver.
             It is important to note that in order to maintain cardioid directivity across all frequencies, the frequency and directivity response of the rear driver in relation to the front driver must be accounted for.
             Using the metric of cardioid directivity given by Jonathan Hargreaves, previously used in Vedier's paper, a digital filter was used to encourage cardioid directivity across the working frequency range of the LF drivers CITE.
@@ -229,12 +272,7 @@
                 \end{split}
             \end{equation}
             Conceptually, if the $a_0$ and $a_1$ coefficients are equal, the directivity pattern will be cardioid.
-            It should be noted that the response of the $a$ coefficients above 500Hz is mostly irrelevant, as the LF drivers will be filtered out in favour of the Mid-High, which has a favourably cardioid directivity.
-
-            The frequency magnitude response of the correction filter was derived by algebraically solving for $\gamma$ across the frequency-domain magnitude of each drivers $a_0$ and $a_1$ coefficients.
-            \begin{equation}
-                \gamma = \frac{a_{0f} - a_{1f}}{a_{1r} - a_{0r}}
-            \end{equation}
+            It should be noted that the response of the $a$ coefficients above 500Hz is mostly irrelevant, as the LF drivers will be filtered out in favour of the Mid-High, which has a favorably cardioid directivity.
             Each driver's $a_0$ and $a_1$ coefficients were derived using the initial frequency and directivity response measurements of the ASL.
             \begin{lstlisting}[style=Matlab-editor, gobble=16]
                 function [a0, a1] = Compute_a_coeff(p, beta, k, r)
@@ -248,16 +286,66 @@
                 
                 end
             \end{lstlisting}
-            Applying $\gamma$, the filter, to the rear LF woofer and recalculating the $a_0$ and $a_1$ coefficients for each driver gives a coefficient-over-frequency response shown in Fig.\ref{coeffsPredicted}.
+
+            The resulting $a$ coefficients, while precise, were rough in envelope to the point that a closely matching filter would be unfeasible.
+            This can be seen when plotting the immediately derived $a$ coefficients, shown in Fig.\ref{acoeffsNoSmooth}.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.35]{figs/acoeffsNoSmooth.png}%
+                \caption{Real and imaginary parts of $a$ coefficients with no smoothing applied.}
+                \label{acoeffsNoSmooth}
+            \end{figure}
+            Figure \ref{acoeffsNoSmooth} plots both the real and imaginary parts of the calculated $a$ coefficients, and in the real and imaginary parts of $a_0$ and $a_1$ for both drivers, the plot is jagged with high dynamic range between 0-150Hz.
+            Whilst any frequencies below 20Hz may be disregarded as inconsequential to a human listener, the 20-150Hz range is within the frequency range where the LF drivers are attempting to give a cardioid directivity.
+            Thus, any smoothing applied to this region will have the trade-off of reduced precision and accuracy in the ability of the filter to match the $a$ coefficients in this crucial frequency band.
+            Finding a good compromise point between the amount post-measurement smoothing and required accuracy in the filter is a point for further study.
+            MATLAB's \texttt{smoothdata()} function was used, on it's default setting, to smooth the $a$ coefficients.
+            MathWorks describe \texttt{smoothdata()} as a function that: `Returns a moving average of the elements of a vector using a fixed window length that is determined heuristically. The window slides down the length of the vector, computing an average over the elements within each window.' \cite{smoothdata}.
+            As the design of the correction filter follows an inverse-FFT methodology, which will be elaborated upon in a further section, only a magnitude response over frequency of the correction filter is needed.
+            Therefore, only the magnitude response of the $a$ coefficients was needed to construct the correction filter that makes both $a$ coefficients magnitude equivalent over frequency; this magnitude response can be thought of as an envelope in time without any relevant frequency information, and as such a moving average filter's undesirable frequency characteristics are irrelevant \cite{smith2013digital}.
+            Figure \ref{acoeffsSmooth} shows how the moving-average filter has smoothed the $a$ coefficients enough to remove any jagged jumps but keep most of the envelope's main curves and information.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.35]{figs/acoeffsSmooth.png}%
+                \caption{Real and imaginary parts of $a$ coefficients with smoothing applied.}
+                \label{acoeffsSmooth}
+            \end{figure}
+
+            The frequency magnitude response of the correction filter was derived by algebraically solving for a hypothetical $\gamma$, the correction filter, across the frequency-domain magnitude of each driver's smoothed $a_0$ and $a_1$ coefficients.
+            Equation \ref{gammaAlgebra} shows the magnitude of gamma at each frequency algebraically related to the $a$ coefficients of the front and rear drivers.
+            \begin{equation}
+                \gamma = \frac{a_{0f} - a_{1f}}{a_{1r} - a_{0r}}
+                \label{gammaAlgebra}
+            \end{equation}
+            Mathematically applying $\gamma$, the derived correction filter, to the rear LF woofer and recalculating the $a_0$ and $a_1$ coefficients for each driver gives a predicted coefficient-over-frequency response shown in Fig.\ref{coeffsPredicted}.
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/coeffsPredicted.png}%
                 \caption{$a_0$ and $a_1$ coefficients remain equal across frequency after $\gamma$ is applied to the measured coefficients.}
                 \label{coeffsPredicted}
             \end{figure}
+            Whilst the perfectly matching $a_0$ and $a_1$ coefficients shown in Fig. \ref{coeffsPredicted} are promising, and prove the validity of the algebraic derivation $\gamma$, they are ultimately theoretical.
+            A plot of the frequency response of $\gamma$ is given in Fig.\ref{gammaMagnitude}.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.35]{figs/gammaMagnitude.png}%
+                \caption{The magnitude of $\gamma$ over frequency.}
+                \label{gammaMagnitude}
+            \end{figure}
+            Whilst only the rough range of 20-500Hz is relevant to the LF drivers, the $a$ coefficients and thus $\gamma$ were calculated across the entire frequency range, up to the Nyquist limit, of the measurement system.
+            Upon further inspection of the impact of gamma above 500Hz, unwanted noise and dynamic range is found in the filter, shown by the normalized $\gamma$ in Fig.\ref{gammaCompare}.
+            The normalised $\gamma$ 
+            This presents the next challenge: fitting a real-world implementable filter to $\gamma$.
 
-        \section{Correction Filter Implementation}
-            The generated impulse response, shown in Fig.\ref{origImpulse}, is non-causal, with a substantial section wrapped back around $t=0$ to the end of the response.
+        \subsection{Correction Filter Implementation}
+            A simple and direct way to fit an appropriate filter's magnitude response to $\gamma$ is to use the inverse-FFT method, resulting in a finite-impulse response (FIR) filter.
+            The inverse-FFT method of FIR filter design uses an inverse-FFT algorithm to compute the time-domain impulse response of a filter from it's frequency-domain magnitude response \cite{li2019digital}.
+            As the time-domain impulse response is simply a single finite-length series of scalars, it may be described in the context of FIR filters as a series of $b$ coefficients, where the $a$ coefficients in the in the FIR filter are nonexistent.
+            MATLAB's built in signal processing functions, shown in code snippet \ref{FIRgeneration}, were used to generate the FIR filter's impulse response.
+
+
+
+            The generated impulse response, shown in Fig., is non-causal, with a substantial section wrapped back around $t=0$ to the end of the response.
             This generated audible artifacts and ringing when convolved with any audio signal and played back.
             Thus, the impulse response of the filter was processed to eliminate this non-causality, but preserve it's original frequency and phase characteristics.
             Using MATLAB's \texttt(tukeywin()) function
@@ -270,8 +358,12 @@
 \chapter{Discussion and Conclusions}
 
 \chapter{Further Work}
+    A-coeff smoothing investigation.
+    Driver model suitability
+    length of coupled chamber
+    cavity resonances ala KEF
 
-\bibliographystyle{apalike}
+\bibliographystyle{IEEEtran}
 \bibliography{theBib.bib}
 
 \end{document}
