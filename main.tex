@@ -26,7 +26,7 @@
 %Thesis title
     {\uppercase{\Large Sound Field Control with an Axissymetric, Cardioid Loudspeaker\par}}
     \vspace{3cm}
-%Author's name
+%Author's 
     {\Large Alex Booth, supervised by Dr. Jonathan Hargreaves\par}
     \vspace{3cm}
 %Degree
@@ -53,15 +53,12 @@
 \newpage
 
 \chapter{Introduction}
-    OPENING
     The Audio Engineering Society (AES) defines sound field control as the `process of creating a set of loudspeaker signals to create a certain listening experience over a listening area' \cite{AESsoundfieldcontrol}.
-    The directionality of a loudspeaker can be a definitive tool of active sound field control.
+    The directionality of a loudspeaker can be a definitive tool of active sound field control; directional configurations, such as line arrays or subwoofers arranged to give cardioid directivity, are commonplace in live entertainment.
 
-    BACKGROUND
     An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the Universtiy of Salford.
     This loudspeaker consists of a perspex cylindrical two-driver coupled cabinet with drivers mounted at either end of the cylinder, and a KEF Uni-Q mid-high driver mounted coaxially with the `front' end of the cylindrical body.
     A diagram of the system is give in Fig.SPEAKER DIAGRAM.
-
 
 
     RESEARCH PROBLEM
@@ -99,17 +96,17 @@
         Controlling the directivity of sound at an outdoor event is vital to both ensure even distribution of experience to an audience, and isolation of neighbors from noise pollution.
         Franz M. Heuchel, Diego Caviedes-Nozal, Jonas Brunskog, et al\. explore this in their paper: `Large-scale outdoor sound field control' \cite{heuchel2020large}.
         The authors investigate the low-frequency directivity performance of loudspeaker systems across atmospherically varying outdoor spaces, as opposed to the linear, homogenous, isotropic indoor conditions described in OTHER PAPERS.
-
-
-
         Wave field synthesis is a particular technique of sound field control, where arrays of loudspeakers 
 
     \section{Directional Loudspeakers}
+
+
 
         Harry Olson's `Gradient Loudspeakers'~\cite{olson1973gradient} forms the theoretical foundation of controlling the directionality of emitted sound with multiple loudspeaker drivers.
         The key concept Olson introduces is the `gradient loudspeaker', which are organized into orders.
         Zero-order gradient loudspeakers utilize a single driver within a sealed cabinet to give a theoretical monopole directionality, much like an omnidirectional microphone.
         Higher orders introduce directionality; a first-order unidirectional loudspeaker constructed with a spaced and delayed pair of zero-order gradient speakers operating 180\degree\@ out of phase gives a cardioid response.
+        The delay between both drivers is fixed across all frequencies.
         Olson gives the radiated pressure of this unidirectional gradient loudspeaker, shown in Eq.\ref{olsonFirstOrderPressure}.
         \begin{equation}
             p = 2CU_f\cos{kct}[\sin{\frac{kd}{4}+\frac{kD}{4}\cos{\theta}}]
@@ -122,9 +119,19 @@
             \caption{Olson's first order unidirectional loudspeaker.}\cite{olson1973gradient}
             \label{olsonFirstOrderDiagram}
         \end{figure}
+        Olson states that if the distance between the drivers, $D$ equals $d$, the distance delay introduced and seen in Fig.\ref{olsonFirstOrderDiagram}, the directivity of the system will be cardioid.
+        The wavenumber, $k$, found in Eq.\ref{olsonFirstOrderPressure}, introduces a frequency dependence to the $D=d$ condition, thus affecting how cardioid the speaker may be.
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{figs/olsonFirstOrderDirectivity.png}%
+            \caption{Olson's first order unidirectional loudspeaker.}\cite{olson1973gradient}
+            \label{olsonFirstOrderDirectivity}
+        \end{figure}
+
+
         Predating his work on gradient loudspeakers, Olson was an early descriptor of the beam narrowing effect of loudspeaker line arrays \cite{olson1957acoustical}.
-        Line arrays would go on to be a principle tool of sound field control in the modern day.
-        However, gradient loudspeakers are still, relative to line arrays, uncommon.
+        Line arrays would go on to be a principle tool of sound field control in the modern day, but gradient loudspeakers are still, relative to line arrays, uncommon.
         Cardioid subwoofer systems used in live audio are common implementations of gradient loudspeaker designs.
         These subwoofers can be sold as gradient loudspeakers themselves, often with switchable directivity patterns; audio engineers will also arrange standard, omnidirectional subwoofers into configurations that introduce a phase delay sufficient to create a cardioid directivity pattern~\cite{curtis2022cardioidsubs}.
         Jordan Cheer elaborates on the use of a `two source line array', which in essence is an Olson-style directional gradient loudspeaker, stating: `Two-source line arrays have been used in a variety of applications to generate localised listening zones and have also been used as a constituent element of larger arrays to achieve sound field control more generally.'\cite{cheer2015robustness}.
@@ -144,6 +151,9 @@
             \label{cheerGraph}
         \end{figure}
         Cheer's figure \textit{a} (Fig.\ref{cheerGraph}) shows that when a constraint (to use the same electrical power as the coupled array) is applied to an \textit{un}-coupled two-source superdirective loudspeaker it loses a significant degree of acoustic contrast.
+
+        SHAUN NIELSEN
+
         A BIT MORE HERE?
         Considering Cheer's findings, prior to the work this dissertation describes, the ACL was constructed with an acoustically coupled main chamber for the LF drivers.
 
@@ -174,8 +184,6 @@
         \end{figure}
         Whilst the model of LF driver and the cavity in which it is mounted in are different to the ACL, KEF's findings are applicable to the three-way coaxial design of the ACL and as such prompt further investigation into these `cavity resonances'.
 
-
-
     \section{Quantifying Loudspeaker Directivity} 
         When describing a new, `holographic' near-field method of loudspeaker directivity measurement, Wolfgang Klippel and Christian Bellmann elaborate on the use of spherical harmonics as constituent solutions to the Helmholtz equation \cite{klippel2016holographic}.
         Whilst their paper focuses on the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments, the description of spherical harmonics
@@ -183,7 +191,7 @@
         The project described in this dissertation builds on previous work not only by the supervisory but also by other (former) students of the University of Salford.
         During the COVID-19 lock-down period the acoustic properties of the prototype loudspeaker were modelled with computer simulations.
         Paul Vedier carried out these simulations as part of his Master's dissertation.
-        The spherical harmonic metric used by Vedier derived from Klippel's formulation.
+        A metric derived by Vedier, is used to quantify cardioid directivity and will be utilized to achieve the practical aims of correcting for cardioid directivity over all frequencies in the ACL.
         Vedier's paper confirms, using COMSOL, that the ACL has the properties of an Olson-style gradient loudspeaker.
         In Fig.\ref{vedierPolar} Vedier compares FEM analysis of two fully-modelled membranes in a cabinet and compares to Olson's analytical method.
         \begin{figure}[H]
@@ -192,13 +200,6 @@
             \caption{FEM model of the ACL compared with Olson's first order unidirectional loudspeaker.}\cite{vedier}
             \label{vedierPolar}
         \end{figure}
-
-\chapter{Key Theories}
-    \section{Spherical Harmonics as a Method of Describing Cardioid Directivity}
-    \section{Phase and Time Relationships Between Drivers}
-    \section{Digital Signal Processing and Filtering}
-
-
 
 \chapter{Methodology}
     \section{Initial Transfer Function and Directivity Measurement}
@@ -238,17 +239,17 @@
         \end{figure}
         Manually cycling through each angle's driver frequency responses, anomalous data was manually averaged out using it's nearest angle neighbors.
 
-
-
-    
     \section{Rear Driver Correction Filter Design}
         \subsection{Theory}
-            The radiation of the rear driver of the ASL needs to have a particular phase relationship to radiation of the front driver.
+            The radiation of the rear driver of the ASL needs to have a particular phase and frequency relationship to radiation of the front driver.
             It is important to note that in order to maintain cardioid directivity across all frequencies, the frequency and directivity response of the rear driver in relation to the front driver must be accounted for.
-            Using the metric of cardioid directivity given by Jonathan Hargreaves, previously used in Vedier's paper, a digital filter was used to encourage cardioid directivity across the working frequency range of the LF drivers CITE.
-            When devising this metric, only the zeroth and first spherical harmonics were considered, as a true cardioid directivity can be described in three dimensions using only these harmonics ELABORATE MAYBE CITE.
-            Using equation EQUATION HERE to find the coefficients $a_0$ and $a_1$ for the front and rear drivers.
-            Equation \ref{sphericalPressure}.\ shows how spherical harmonic coefficients as a function of pressure over spherical angles, where the $R$ term accounts for any residual directivity.
+
+            Using the metric of cardioid directivity given by Jonathan Hargreaves, previously used and elaborated upon in Vedier's paper, a digital filter was used to encourage cardioid directivity across the working frequency range of the LF drivers \cite{vedier}.
+            When devising this metric, only the zeroth and first spherical harmonics were considered, as a true cardioid directivity can be described in three dimensions using only these harmonics.
+            Incorporating higher order spherical harmonics in to a newer, more precise directivity metric may be useful in a further investigation of the non-cardioid directivity behavior of the ACL, but were beyond the scope of this filter design.
+            Vedier's work derives a pair of coefficients $a_0$ and $a_1$ from a more general solution to spherical wave propagation, further stating that if these $a_n$ coefficients are equal, then the radiated pressure waves' directivity must be spherical.
+            Using Eq.\ref{a0a1} to find the coefficients $a_0$ and $a_1$ for the front and rear drivers.
+            Equation \ref{sphericalPressure}.\ shows how spherical harmonic coefficients can be expressed as a function of pressure over spherical angles, where the $R$ term accounts for any residual directivity.
             \begin{equation}
                 p_{ff}(\beta,\alpha) = a_0 + a_1 \cos(\beta) + R(\beta,\alpha)
                 \label{sphericalPressure}
@@ -258,27 +259,29 @@
                 \begin{split}
                     a_0(\omega) &= \frac{1}{ikh_0^{(1)}(kr_{meas})} \sqrt{\frac{1}{4\pi}} c_{0,0}(\omega) \\
                     a_1(\omega) &= \frac{1}{ikh_1^{(1)}(kr_{meas})} \sqrt{\frac{3}{4\pi}} c_{0,1}(\omega)
-                    \label{a0a1}
-                    \cite{hargreaves}
+                    \label{a0a1}\cite{hargreaves}
                 \end{split}
             \end{equation}
-            Equation \ref{a0a1} utilises Hankel functions, GOOD EXPLANATION AND CITATION HERE.
-            The Hankel functions used are defined in Eq.\ref{hankel}
+            Equation \ref{a0a1} utilises spherical Hankel functions of the first kind, which are a combination of a Hankel function of the first kind and a spherical Bessel functions of the first and second kind \cite{weisstein}.
+            The complex exponential component of the given spherical Hankel function characterizes the outwards propagation and decay of a spherical wave; the negative-signed $-e^{ikt}$ component is in contrast to the rest of the positive-signed complex exponentials in the filter generation script.
+            Therefore to keep the complex exponential's signs consistent, the complex conjugate of the defined spherical Hankel functions is taken before their use in any calculations.
+            The Hankel functions used are defined in Eq.\ref{hankel}, and are derivatives of those given by Wolfram \cite{weisstein}.
             \begin{equation}
                 \begin{split}
                     h_0^1 &= -i  e^{ikr}  \frac{1}{kr} \\
-                    h_1^1 &= -e^{ikr}  \frac{kr + i}{kr^2} ~\cite{hargreaves}
-                    \label{hankel}
+                    h_1^1 &= -e^{ikr}  \frac{kr + i}{kr^2}
+                    \label{hankel} \cite{weisstein}
                 \end{split}
             \end{equation}
+
             Conceptually, if the $a_0$ and $a_1$ coefficients are equal, the directivity pattern will be cardioid.
             It should be noted that the response of the $a$ coefficients above 500Hz is mostly irrelevant, as the LF drivers will be filtered out in favour of the Mid-High, which has a favorably cardioid directivity.
             Each driver's $a_0$ and $a_1$ coefficients were derived using the initial frequency and directivity response measurements of the ASL.
             \begin{lstlisting}[style=Matlab-editor, gobble=16]
                 function [a0, a1] = Compute_a_coeff(p, beta, k, r)
                     % Hankel functions (spherical bessel functions with decay):
-                    h01 = -1i .* exp(1i .* k .* r) .* (1./(k.*r));
-                    h11 = -exp(1i .* k .* r) .* (((k.*r) + 1i)./((k.*r).^2));
+                    h01 = conj(-1i .* exp(1i .* k .* r) .* (1./(k.*r)));
+                    h11 = conj(-exp(1i .* k .* r) .* (((k.*r) + 1i)./((k.*r).^2)));
 
                     % Computing a_0, a_1 coefficients:
                     a0 = (pi./(2i .* k .* h01)) .* mean(p.*sin(beta),2);
@@ -326,30 +329,92 @@
             \end{figure}
             Whilst the perfectly matching $a_0$ and $a_1$ coefficients shown in Fig. \ref{coeffsPredicted} are promising, and prove the validity of the algebraic derivation $\gamma$, they are ultimately theoretical.
             A plot of the frequency response of $\gamma$ is given in Fig.\ref{gammaMagnitude}.
+            Plots of the phase and group delay over frequency of $\gamma$ are given in Fig.\ref{grpDelay}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.25]{figs/grpDelay.png}%
+                \caption{Phase and group delay of the correction filter $\gamma$ are as important as the frequency response.}
+                \label{grpDelay}
+            \end{figure}
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/gammaMagnitude.png}%
                 \caption{The magnitude of $\gamma$ over frequency.}
                 \label{gammaMagnitude}
             \end{figure}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.35]{figs/gammaCompare.png}%
+                \caption{Normalizing $\gamma$ and plotting over the entire frequency range shows the extent of noise above the relevant frequency range.}
+                \label{gammaCompare}
+            \end{figure}
             Whilst only the rough range of 20-500Hz is relevant to the LF drivers, the $a$ coefficients and thus $\gamma$ were calculated across the entire frequency range, up to the Nyquist limit, of the measurement system.
             Upon further inspection of the impact of gamma above 500Hz, unwanted noise and dynamic range is found in the filter, shown by the normalized $\gamma$ in Fig.\ref{gammaCompare}.
-            The normalised $\gamma$ 
+            The normalized $\gamma$ has such a degree of noise above it's relevant frequency range that the magnitude in the relevant range is almost unnoticeable.
+            In order to eliminate this noise, $\gamma$ was weighted with the frequency response of a 4\^{th} order, 300Hz cut-off, Butterworth low-pass filter (LPF).
+            Figure \ref{gammaCompare} shows the affect of the LPF on the normalized $\gamma$, all the unwanted noise is removed and the useful frequency range is unchanged, as it remains in the pass-band of the LPF.
             This presents the next challenge: fitting a real-world implementable filter to $\gamma$.
 
         \subsection{Correction Filter Implementation}
             A simple and direct way to fit an appropriate filter's magnitude response to $\gamma$ is to use the inverse-FFT method, resulting in a finite-impulse response (FIR) filter.
             The inverse-FFT method of FIR filter design uses an inverse-FFT algorithm to compute the time-domain impulse response of a filter from it's frequency-domain magnitude response \cite{li2019digital}.
             As the time-domain impulse response is simply a single finite-length series of scalars, it may be described in the context of FIR filters as a series of $b$ coefficients, where the $a$ coefficients in the in the FIR filter are nonexistent.
-            MATLAB's built in signal processing functions, shown in code snippet \ref{FIRgeneration}, were used to generate the FIR filter's impulse response.
+            Before taking the inverse-FFT of the $\gamma$ transfer function, it must be weighted (multiplied in the frequency domain) by the LPF.
+            Whilst a Butterworth-type frequency response can be manually drawn in MATLAB as an array of weighting coefficients, using MATLAB's \texttt{butter()} function provided easier tweaking of the LPF, as when calling \texttt{butter()}, properties such a filter order can be set.
+            MATLAB's \texttt{butter()} generates $a$ and $b$ coefficients of an IIR Butterworth filter, as opposed the FIR desired for $\gamma$.
 
+            Whilst FIR filters are guaranteed, by their finite nature, to decay to zero as stable filters, IIR filters are not, the poles of an IIR filter can lay beyond the unit circle leading to growth instead of decay in the impulse response \cite{litwin2000fir}.
+            This can be problematic, and whilst \texttt{butter()}'s design procedure ensures the LPF will be stable the guaranteed stability of FIR filters as opposed to IIR filters was a major factor in choosing to implement $\gamma$ with an FIR filter. 
+            It was also important to consider the causality of $\gamma$.
+            In DSP, causality refers to the relationship between the input and output signals of a system.
+            A causal filter is one in which the output at any given time is dependent only on past and current input values, and not on future input values.
+            In other words, the output of a causal filter can only be affected by events that have already occurred, and not by events that will occur in the future.
+            Causality is an important concept in digital filters, as it is necessary for filters to be causal in order to be physically realizable.
+            For example, if a filter were to rely on future input values to generate its output, it would require knowledge of events that have not yet occurred, which is not possible in a physical system.
+            A causal filter can be implemented using a variety of digital filter structures, such as finite impulse response (FIR) filters or infinite impulse response (IIR) filters.
+            FIR filters are inherently causal, as they rely only on past and current input values to generate their output.
+            IIR filters, on the other hand, may be non-causal, depending on their implementation; it is from this possibility of non-causality that designing an IIR filter to fit the complex magnitude response found in $\gamma$ becomes impractical. 
+            One further consequence of causality in digital filters is the existence of phase distortion.
+            When a causal filter is applied to a signal, the filter introduces a delay in the output signal relative to the input signal.
+            This delay results in a phase shift in the frequency domain, which can cause distortion in the output signal.
+            This phase distortion is particularly pronounced in FIR filters, which introduce a linear phase shift that is proportional to the filter's delay.
+
+In summary, causality is a fundamental concept in digital signal processing and is essential for the physical realizability of digital filters. Causal filters only rely on past and current input values to generate their output, which ensures that they do not require knowledge of future events. However, the introduction of delay in causal filters can result in phase distortion, which can affect the quality of the output signal.
+
+            After the Butterworth LPF was generated, MATLAB's in-built texttt\ {freqz()} function was used to convert the LPF's $a$ and $b$ filter coefficients into a frequency-domain transfer function.
+
+            From here, the frequency-domain transfer function of the LPF was multiplied with the frequency-domain transfer function of $\gamma$, giving the weighted $\gamma$ frequency response shown in Fig.\ref{gammaCompare}.
+            This simple multiplication in the frequency domain should produce no inconsistencies or invalidity of the resultant filter; multiplication in the frequency domain is the same as convolution in the time domain \cite{stanfordConvolution}.
+            All that was left from this point was to transform the new, weighted $\gamma$ into it's impulse response using an inverse FFT, such that the time-domain effects of the filter can be further investigated.
+            \\
+            As aforementioned, the inverse-FFT method of FIR filter design was ultimately used to generate a working $\gamma$ rear-driver correction filter.
+            Using MATLAB's in-built \texttt{ifft()} function requires some considerations: The convolution is CIRCULAR NOT CIRCULAR PROS AND CONS.
+
+            The impulse response of a finite impulse response (FIR) filter is the sequence of filter coefficients that, when convolved with an input signal, produces the filter's output signal.
+            The length of the impulse response corresponds to the number of filter taps, which determines the filter's order. In an FIR filter, the impulse response is finite, meaning that it has a fixed length and eventually decays to zero.
+            One important characteristic of FIR filters is that the impulse response is always causal, meaning that the output of the filter at any given time depends only on past and current input values, and not on future input values. As a consequence of this causality, the impulse response of an FIR filter cannot extend infinitely into the past.
+            However, the impulse response of an FIR filter can extend infinitely into the future, or more precisely, it can wrap around from the end of the sequence to the beginning. This is known as circular convolution, and it occurs when the input signal is periodic. In other words, if the input signal repeats itself every N samples, then the convolution of the input signal with the filter impulse response will also repeat itself every N samples.
+            The concept of circular convolution is important in FIR filter design, as it allows us to treat the impulse response of an FIR filter as a circular buffer. This means that we can implement the filter using a delay line with N samples, where N is the length of the impulse response. The delay line holds the N most recent input samples, and the filter coefficients are applied to the samples in the delay line using circular indexing. This circular indexing ensures that the impulse response "wraps around" from the end to the beginning of the delay line, enabling us to implement the filter with a fixed number of multiply-accumulate operations per sample.
+            In summary, the impulse response of an FIR filter can "wrap around" from the end to the beginning, allowing us to implement the filter using circular convolution. This concept is important in FIR filter design, as it enables us to implement the filter with a fixed number of multiply-accumulate operations per sample, regardless of the length of the filter
+
+            
+            COMPARE PHASE GRPAHS TO OLSONS PHASE GRAPHS (FIG 3)
+            Olson:
+            delay is given as d/2 and kD/2 makes the expression frequency dependent.
+            short delay gives wide enough comb filtering such that u get 2 bumps like in olsons fig 3.
+
+
+            
 
 
             The generated impulse response, shown in Fig., is non-causal, with a substantial section wrapped back around $t=0$ to the end of the response.
             This generated audible artifacts and ringing when convolved with any audio signal and played back.
             Thus, the impulse response of the filter was processed to eliminate this non-causality, but preserve it's original frequency and phase characteristics.
-            Using MATLAB's \texttt(tukeywin()) function
-            Gamma impulse response needed to be windowed around useful area, to shorten FIR filter and remove artifacts.
+            Using MATLAB's \texttt(tukeywin()) function, a window tending zero at it's stop bands was used to keep the useful section of the impulse response and discard the `tail' of the impulse response.
+            A brief investigation into the relationship between the width of the window and the error between the windowed impulse response's frequency response and the original impulse response's frequency response was carried out.
+
+            Certain interactions between the front ad rear drivers will require the rear driver
+
 
 
     \section{Measurement Revisited, Post Filtering}
