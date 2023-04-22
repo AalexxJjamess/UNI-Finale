@@ -115,18 +115,26 @@
         \end{equation}
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.2]{figs/olsonFirstOrder.png}%
+            \includegraphics[scale=0.4]{figs/olsonFirstOrder.png}%
             \caption{Olson's first order unidirectional loudspeaker.}\cite{olson1973gradient}
             \label{olsonFirstOrderDiagram}
         \end{figure}
         Olson states that if the distance between the drivers, $D$ equals $d$, the distance delay introduced and seen in Fig.\ref{olsonFirstOrderDiagram}, the directivity of the system will be cardioid.
-        The wavenumber, $k$, found in Eq.\ref{olsonFirstOrderPressure}, introduces a frequency dependence to the $D=d$ condition, thus affecting how cardioid the speaker may be.
-        
+        The wavenumber, $k$, found in Eq.\ref{olsonFirstOrderPressure}, introduces a frequency dependence to the $D=d$ condition.
+        Figure \ref{olsonFirstOrderDirectivity} shows that across a range of frequencies, a cardioid polar pattern is maintained, albeit with slight differences.
+
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.2]{figs/olsonFirstOrderDirectivity.png}%
-            \caption{Olson's first order unidirectional loudspeaker.}\cite{olson1973gradient}
-            \label{olsonFirstOrderDirectivity}
+            \begin{minipage}{.4\textwidth}
+                \includegraphics[width=\linewidth]{figs/olsonFirstOrderDirectivity.png}
+                \caption{}\cite{olson1973gradient}
+                \label{olsonFirstOrderDirectivity}
+            \end{minipage}
+            \begin{minipage}{.55\textwidth}
+                \includegraphics[width=\linewidth]{figs/olsonFreqResponse.png}
+                \caption{}\cite{olson1973gradient}
+                \label{olsonFreqResponse}
+            \end{minipage}
         \end{figure}
 
 
@@ -418,6 +426,24 @@ In summary, causality is a fundamental concept in digital signal processing and 
 
 
     \section{Measurement Revisited, Post Filtering}
+
+
+        \begin{figure}[H]
+            \begin{minipage}{.49\textwidth}
+                \includegraphics[width=\linewidth]{figs/filteredaCoeffNoSmooth.png}
+                \caption{Un-smoothed $a$ coefficients of the combined response of the front driver and filtered rear driver.}
+                \label{filteredaCoeffNoSmooth}
+            \end{minipage}
+            \begin{minipage}{.49\textwidth}
+                \includegraphics[width=\linewidth]{figs/filteredaCoeffsSmoothed.png}
+                \caption{Smoothed $a$ coefficients of the combined response of the front driver and filtered rear driver.}
+                \label{filteredaCoeffsSmoothed}
+            \end{minipage}
+        \end{figure}
+
+
+
+
 
 
 \chapter{Discussion and Conclusions}
