@@ -8,6 +8,7 @@
 \usepackage[margin=1.25in]{geometry}
 \usepackage[numbered,framed]{matlab-prettifier}
 \usepackage{tikz}
+\usepackage{pdfcomment}
 
 \title{Sound Field Control with a Coaxial, Cardioid, Axisymmetric Loudspeaker}
 \author{Alex Booth, supervised by Jonathan Hargreaves\\ a.booth9@edu.salford.ac.uk}
@@ -30,7 +31,7 @@
     {\Large Alex Booth, supervised by Dr. Jonathan Hargreaves\par}
     \vspace{3cm}
 %Degree
-    {\Large A dissertation submitted for the degree of Audio and Acoustical Engineering BEng.\par}
+    {\Large A dissertation submitted for a Bachelor's of Engineering in Audio and Acoustical Engineering.\par}
     \vspace{3cm}
 %Date
     {\Large May 2023}
@@ -43,13 +44,13 @@
 \chapter*{Abstract}
     \textit{}
 
-\chapter*{Dedication}
-
-
-
 \chapter*{Acknowledgements}
+    I give my sincerest thanks to Liliana, for taking an enthusiastic, supportive interest, helping me stay positive and confident as I studied, investigated and wrote on this topic.
 
+    These thanks also extend to Jonathan, my supervisor, for being a constant and reliable source of support and guidance throughout the entire academic year.
+    Without his help, this dissertation would not be up to the standard it is.
 \tableofcontents
+\listoffigures
 \newpage
 
 \chapter{Introduction}
@@ -59,7 +60,6 @@
     An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the Universtiy of Salford.
     This loudspeaker consists of a perspex cylindrical two-driver coupled cabinet with drivers mounted at either end of the cylinder, and a KEF Uni-Q mid-high driver mounted coaxially with the `front' end of the cylindrical body.
     A diagram of the system is give in Fig.SPEAKER DIAGRAM.
-
 
     RESEARCH PROBLEM
     The main goal of the work described in this paper was to bring the axisymmetric, cardioid loudspeaker (ACL for the rest of this paper) into a physical testing environment, and from that testing environment, determine suitable signal processing to achieve optimal low-frequency cardioid directivity.
@@ -76,7 +76,179 @@
     THE SPEAKER ITSELF AND HOW EACH DRIVER PERFORMS
 
 
+\chapter{Background and Theory}
+    \section{Sound Field Control and it's Applications}
+        Sound field control is commonplace practiced at major outdoor and indoor audiovisual events.
+        Controlling the directivity of loudspeaker-radiated sound at an outdoor event is vital to both ensure even distribution of experience to an audience, and isolation of neighbors from noise pollution.
+        PA loudspeakers are thus designed such that they can be effective not only at producing high sound pressure levels and consistently clear frequency responses, but also effective at controlling a sound field.
 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.4\linewidth]{figs/dbAudiotechnik.png}
+            \caption{D\&B Audiotechnik V12 loudspeaker line array.}
+            \label{dbAudiotechnik}
+        \end{figure}
+
+        Another example of sound field control, this time more commonly found indoors, is wave-field synthesis, where arrays of loudspeakers are used to simulate wavefronts from virtual acoustic sources propagating through a set area.
+
+        The defining characteristic of the wave-field synthesis technique is that the virtual acoustic sources do not change position in relation to an observer moving throughout the field, and may be placed such that the sound `radiating' from each source can come from anywhere within the field.
+        This allows wave-field synthesis to become an incredibly powerful tool of sound field control, and as such the design of loudspeakers used in wave-field synthesis techniques is of note.\pdfcomment{I want to extend this bit. I want to relate the ACL to any sound field control techniques.}
+    \section{Loudspeaker Construction}
+        Loudspeakers are typically constructed within a `cabinet', that is, an enclosure that prevents the rear radiation of a loudspeaker from destructively interfering with the frontal, on-axis radiation.
+        These cabinets come in a variety of forms: Sealed, vented, transmission line or, in the case of multi-driver cabinets, a combination of any of the aforementioned.
+        When mounted in a cabinet, the rear radiation from a driver does not simply disappear, it instead interacts with the acoustic environment present inside the cabinet.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.6\textwidth]{figs/hs-7back.jpg}
+            \caption{A deconstructed Yamaha HS7 studio monitoring loudspeaker, note the acoustic treatment inside the cabinet and the embedded DSP chips on the printed circuit board \cite{ASRcrosssection}.}
+            \label{hs-7back}
+        \end{figure}
+
+        Figure \ref{hs-7back} shows how manufacturers will use acoustic treatment to manipulate the acoustic interactions between the rear radiation of the driver and the cabinet.
+        The construction of the prototype ACL follows this general scheme, and is constructed with a sealed cabinet.
+        A sealed, cylindrical, perspex cabinet with plywood reinforcements houses the two low frequency (LF) drivers.
+        This cabinet is then stuffed with fibrous acoustic treatment to damp any standing waves that may occur within.
+
+        Coaxially mounted to the front face of the cylinder is a KEF Uni-q coaxial driver with a 3D-printed waveguide.
+        Coaxial driver configurations are a design choice that leads to axisymmetry in driver directivity, that is, the driver may be rotated about the axis of coaxial mounting and no phase shift between woofer and tweeter at the crossover point will be introduced, as the distance between the listener and both drivers remains constant.
+
+        Loudspeaker systems aiming to achieve good power efficiency at low frequencies will often employ a vented design.
+        This is where a tuned, often cylindrical vent (as seen in Fig. \ref{hs-7back}), is mounted to a wall of the cabinet allowing air and thus acoustic pressure waves to flow out of the cabinet in a controlled manner.
+        The tuning of the vent will encourage the pressure radiation from the vent to be in-phase with frontal radiation of the driver such that low-frequency response is boosted instead of destructively interfered with like in a loudspeaker hanging in free space.
+        Another way of extending low-frequency efficiency is to employ a passive radiator, which is a loudspeaker diaphragm with no attached voice coil nor magnet; they cannot directly receive nor reproduce an amplified signal.
+        Instead,the acoustic pressure generated by another driver in a shared, sealed cabinet in which both the radiator and the driver are mounted in, excites the diaphragm of the passive radiator and causes pressure radiation from the radiator away from the cabinet.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = \textwidth]{figs/equivalentCircuit.png}
+            \caption{Electrical, mechanical and acoustic elements within a loudspeaker system can be represented in an equivalent circuit form \cite{liechti2021total}.}
+            \label{equivalentCircuit}
+        \end{figure}
+
+        The ACL is in fact not purely any of the aforementioned configurations, instead it leans mostly towards a passive radiator based design, with two \textit{active} drivers mounted within a shared, or acoustically coupled, enclosure.
+        Contrary to this, most multi-driver loudspeakers will have each active driver mounted in acoustically sealed and separate chambers.
+        This design choice for the ACL is based on contemporary research which will be elaborated upon in the literature review.
+
+        Whilst loudspeaker design typically employs the use of equivalent circuit analogies, as shown in Fig. \ref{equivalentCircuit}, this project does not suggest any alterations to the physical construction of the loudspeaker system and as such the equivalent circuit of the system is of note, but not particularly relevant to this report.
+        
+    \section{General Loudspeaker Directivity}
+        Understanding the directivity of a loudspeaker is a crucial component of evaluating it's real-world performance.
+        Whilst sound sources are often abstracted as monopoles or dipoles with perfectly spherical radiation, in the real world the directivity of a source is much more complex and depends on many factors.
+        
+        The frequency component of radiated sound is one factor; low-frequency radiation is typically modelled as monopole and high frequency radiation from a loudspeaker often shows `lobing', as can be seen in Fig. \ref{initialDirectivity}.
+        This relationship is due to the negative proportionality between wavelength and frequency, where wavelengths get shorter the higher a signal's frequency increases. \pdfcomment{cite this? I'm not really sure how much I should be citing in the theory section.}
+
+        A common method of measuring the directivity of a loudspeaker is to calculate a directivity factor.
+        Equation \ref{directivityFactor} shows how the directivity factor, as a function of frequency, is simply a ratio of radiated sound intensity from a measured loudspeaker $I_r$ to the sound radiated from a monopole point source \cite{meggitt2020loudspeakers}.
+        This factor is then converted in to a decibel scale for ease of understanding.
+
+        \begin{equation}
+            \begin{split}
+                Q(f) &= \frac{I_r}{I_p} \\
+                DI(f) &= 10\log_{10}(Q(f))
+                \label{directivityFactor}
+            \end{split}
+        \end{equation}
+        
+        Controlling the directivity of a loudspeaker may be achieved first with the physical design of a loudspeaker, the three-dimensional waveguide surrounding the Uni-Q on the ACL is a good example of this.
+        However, manipulating the phase relationship between arrays of multiple loudspeaker drivers is also a prevalent method, and is the method explored in this project.
+
+        By introducing a phase shift between two acoustic point sources that have some spacing apart, the zones of constructive and destructive interference can be manipulated such that the combined `beam' of radiated sound can be steered.
+        This, and other multi-driver directivity control theory, was pioneered by Harry Olson, and Olson's work will be elaborated upon in the literature review.
+        \pdfcomment{Should I add some extra bits here? equations describing beam steering?}
+        
+    \section{Spherical Harmonics}
+        The theory behind spherical harmonics is an extension of Fourier analysis into the domain of three-dimensions and in particular, the surfaces of spheres.
+        This is relevant to the directionality of a loudspeaker, as acoustic waves propagating from a monopole source, such as low-frequency radiating loudspeaker, are generally spherical \cite{kinslerFreySpherical}.
+        As such, the theory of spherical harmonics was chosen to characterize and measure the directivity of the ACL.
+
+        It is important to note the co-ordinate system used to characterize spherical harmonics in this report, Fig. \ref{sphericalCoords} illustrates this system.
+        The polar angle $\beta$ is of particular note when used to derive a metric of cardioid directivity.
+    
+        \begin{figure}[H]
+            \centering
+            \begin{minipage}{.4\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{figs/sphericalCoords.png}
+                \caption{Spherical harmonic coordinate system \cite{hargreaves2020spherical}}
+                \label{sphericalCoords}
+            \end{minipage}
+            \begin{minipage}{.59\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{figs/klippelSphericalHarms.png}
+                \caption{Ascending orders of real-valued spherical harmonics \cite{klippel2016holographic}.}
+                \label{klippelSphericalHarms}
+            \end{minipage}
+        \end{figure}
+
+        The lowest zero-order spherical harmonic, shown in Fig. \ref{klippelSphericalHarms}, describes the behavior of sound waves emanating from a single point source (a monopole).
+        Next, the first-order spherical harmonic describes the behavior of two opposite sources with the same strength and frequency (a dipole).
+        Higher order harmonics can account for more complex sound sources and reflectors, such as spherical resonators and the scattering from diffusers, however these harmonics are not considered when characterizing the directivity of the ACL.
+        Discarding the higher-order harmonics will allow for easier mathematical analysis of the system, but will also lead to a less accurate characterization.
+        
+        A metric was ultimately derived from functions of the zero and first order spherical harmonics by a previous master's student at the University of Salford, this will be elaborated upon in the literature review.
+
+    \section{Digital Filtering}
+        Digital filters are commonplace found in the modern world of audio processing, whether in software, prototyping, or embedded systems. \pdfcomment{Once again I feel like I should be citing here?}
+        The digital filtering performed in this project would be within the framework of an embedded system, where firmware on a digital signal processing (DSP) chip, such as an Analog Devices SigmaDSP®, are used to process some input to a system, which is a loudspeaker unit this case.
+        However, as a work-in-progress prototype, all filtering is contained within MATLAB scripts used to output test signals to each driver.
+
+        This style of embedded filtering is often found within loudspeakers that may have to work with design constraints like portability or ruggedness.
+        However, signal processing is also used within high-budget, professional-level systems deployed at large-scale events.
+        In this case, DSP may be used to cross-over loudspeaker units into their dedicated frequency bands or introduce time-based delay to delay lines at an outdoor event.
+
+        An audio filter will generally have some amplitude-over-frequency response and some phase-over-frequency response.
+        Filters need not have both of these characteristics, they may have a totally flat frequency response but a specific phase response (`all-pass filter'), and a filter may also have a precise frequency response and a totally linear phase response.
+
+        Audio filtering in DSP may at times be analogous to audio filtering in the domain of analogue electronics, where components with `memory' dictate the characteristics of a filter. 
+        In analogue electronics, these components are capacitors and inductors, and their `memory' is the time taken to charge and discharge.
+        In the context of DSP, the `memory' of a filter is found in delay lines or `taps' and their time-domain response to a unit impulse, or, the `impulse response' of the filter.
+        In order to implement a digital filter to the time-domain form of a signal, a discrete-time convolution must be performed between the signal and the impulse response of the filter.
+        Digital filters are described and implemented using $a$ and $b$ coefficients.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.4\linewidth]{figs/filterGraph.png}
+            \caption{A two-tap digital filter, represented in a signal flow chart.}
+            \label{filterGraph}
+        \end{figure}
+        
+        In this project, a finite impulse response (FIR) filter is derived in order to fit a certain frequency and phase response required at the rear driver such that the combined response of the front and rear driver is cardioid.
+        A FIR filter is named over the fact that it's time-domain impulse response is finite-length and eventually decays to zero.
+        The length of the FIR filter's impulse response corresponds to the number of filter taps, determining the filter's order.
+        FIR filters have no $a$ coefficients, instead only having $b$ coefficients.
+        The samples in the impulse response of the FIR filter \textit{are} the $b$ coefficients of the filter.
+        To implement the FIR filter, simply convolve the impulse response with the time-domain signal you wish to filter.
+        The methodology section of this report will elaborate on the use of an FIR filter in this project, and the results of the derived filter.
+
+        Of particular note is the causality of the filter.
+        In DSP, causality refers to the relationship between the input and output signals of a system.
+        A causal filter is one in which the output at any given time is dependent only on past and current input values, and not on future input values.
+        In other words, the output of a causal filter can only be affected by events that have already occurred, and not by events that will occur in the future.
+        It is necessary for filters to be causal in order to be physically realizable; a system cannot look into the future.
+        However, mathematical derivations of filters using commonplace techniques may lead to an anti-causal impulse response
+
+        A causal filter can be implemented using a variety of digital filter structures, such as finite impulse response (FIR) filters or infinite impulse response (IIR) filters.
+        FIR filters are inherently causal, as they rely only on past and current input values to generate their output.
+        IIR filters, on the other hand, may be non-causal, depending on their implementation; it is from this possibility of non-causality that designing an IIR filter to fit the complex frequency response found in $\gamma$, the filter derived in this project, becomes impractical. 
+
+        When a causal filter is applied to a signal, the filter introduces a delay in the output signal relative to the input signal.
+        This delay results in a phase shift in the time domain, which may or may not be beneficial, according to the design specification of the filter.
+        This phase shift may be particularly pronounced in FIR filters, which introduce a linear phase shift that is proportional to the filter's delay, due to the delay-line nature of their construction.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.6\linewidth]{figs/causality.png}
+            \caption{An anti-causal output will be in negative time compared to the input.}
+            \label{causality}
+        \end{figure}
+        
+        A notable property of FIR filters is that the impulse response can extend infinitely into the future, or more precisely, it can wrap around from the end of the sequence to the beginning.
+        This wrapping around is an important property in FIR filter design, as it allows us to treat the impulse response of an FIR filter as a circular buffer.
+        This allows for a more efficient convolution of the FIR filter with an input signal, as opposed to convolving a large, unwieldy impulse response with every sample block in a digital audio buffer.
+
+        
 \chapter{Literature Review}
     AUTHOR'S PROBLEM
     KEY CONCEPTS IN SOURCE
@@ -87,20 +259,44 @@
     STRENGTHS?
     WEAKNESSES?
 
-    \section{Sound Field Control}
+    \section{Investigations into the Use of Loudspeakers in Sound Field Control}
+
+        Indoor sound field control techniques are explored by Ole Kirkeby and Philip A. Nelson in `Reproduction of Plane Wave Sound Fields' \cite{kirkeby1993reproduction}.
+        In particular, Kirkeby and Nelson investigate how well a plane wave may be reproduced by an array of monopole sources suspended in a free field.
+        Ultimately they found that the quality of a generated plane wave sound field is tied to the angles between each source and the center of a receiver array and the size of the receiver array.
+        These conclusions were reached by applying the Kirchoff-Helmholtz theorem to a continuous two-dimensional plane over which a sound field is controlled \cite{kirkeby1993reproduction}.
+
+        `Sound Field Control with a Circular Double-Layer Array of Loudspeakers', by Ji-Ho Chang and Finn Jacobsen makes a key point regarding sound field control with loudspeakers: That the methods described in literature may be separated into those that seek to approximate a desired sound field, and those that seek to create acoustic `dark' and `bright' zones \cite{chang2012sound}.
+        In other words, loudspeakers can manipulate the sound within a zone, facilitate sound field control which aims to exclude or encourage the presence of sound in particular zones.
+        They further elaborate on a method which seeks to synthesize the aforementioned categories and control wavefront behavior, like in Kirkeby and Nelson's paper, whilst maintaining an acoustic dark and bright zone.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.6\linewidth]{figs/changField.png}
+            \caption{Simulations show Chang and Jacobsen's circular array manages to both recreate a plane wave within the sound field \textit{and} create a acoustic bright and dark zones \cite{chang2012sound}.}
+            \label{changField}
+        \end{figure}
+
+        Whilst the findings of this paper were obtained through simulation, it is worth noting that Chang and Jacobsen specify the simulated loudspeakers used.
+        Individual loudspeakers in the array are modeled as a weighted combination of a dipole and a monopole, with cardioid directivity.
+        As a two-layer circular array, the innermost layer of loudspeakers points toward the center of the bright zone, and the outer points away.
+        This use of cardioid loudspeakers suggests suitability of the ACL for a real-world recreation of this array, albeit the length of a cylinder-based design may make a two-layer configuration unwieldy.
+
+        Franz M. Heuchel, Diego Caviedes-Nozal, Jonas Brunskog, et al. explore outdoor sound field control in their paper: `Large-scale outdoor sound field control' \cite{heuchel2020large}.
+        The authors investigate the low-frequency directivity performance of loudspeaker systems across atmospherically varying outdoor spaces, as opposed to the linear, homogenous, and isotropic conditions often assumed indoors.
+        This paper contains many points of interest for this project, beginning with employing Kirkeby and Nelson's pressure matching method \cite{kirkeby1993reproduction} to derive an optimal filter to apply to the `control' loudspeakers providing the active cancellation that gives a zone of sound field control.
+        This optimal filter is generated using the inverse fast Fourier transform method (IFFT), the same technique as is used in the ACL project.
+        
+        Spherical harmonics are also employed to create a sound propagation model, in which the generating loudspeakers are assumed to be axisymmetric.
+        However, the spherical harmonics used are of a higher order than those utilized in this project.
+        \begin{equation}
+            \hat{h}(\m)
+
+        \end{equation}
+        Ultimately Heuchel, Caviedes-Nozal, Brunskog, et al. find that using active control systems is effective in sound field control in large outdoor environments, but note that varying meteorological conditions must be accounted for in real time, as expected.
         
 
-    \section{Applications of Sound Field Control}
-
-        Outdoor sound field control is commonplace practiced at major outdoor audiovisual events.
-        Controlling the directivity of sound at an outdoor event is vital to both ensure even distribution of experience to an audience, and isolation of neighbors from noise pollution.
-        Franz M. Heuchel, Diego Caviedes-Nozal, Jonas Brunskog, et al\. explore this in their paper: `Large-scale outdoor sound field control' \cite{heuchel2020large}.
-        The authors investigate the low-frequency directivity performance of loudspeaker systems across atmospherically varying outdoor spaces, as opposed to the linear, homogenous, isotropic indoor conditions described in OTHER PAPERS.
-        Wave field synthesis is a particular technique of sound field control, where arrays of loudspeakers 
-
-    \section{Directional Loudspeakers}
-
-
+    \section{Historical Directional Loudspeaker Designs}
 
         Harry Olson's `Gradient Loudspeakers'~\cite{olson1973gradient} forms the theoretical foundation of controlling the directionality of emitted sound with multiple loudspeaker drivers.
         The key concept Olson introduces is the `gradient loudspeaker', which are organized into orders.
@@ -137,15 +333,13 @@
             \end{minipage}
         \end{figure}
 
-
         Predating his work on gradient loudspeakers, Olson was an early descriptor of the beam narrowing effect of loudspeaker line arrays \cite{olson1957acoustical}.
         Line arrays would go on to be a principle tool of sound field control in the modern day, but gradient loudspeakers are still, relative to line arrays, uncommon.
         Cardioid subwoofer systems used in live audio are common implementations of gradient loudspeaker designs.
         These subwoofers can be sold as gradient loudspeakers themselves, often with switchable directivity patterns; audio engineers will also arrange standard, omnidirectional subwoofers into configurations that introduce a phase delay sufficient to create a cardioid directivity pattern~\cite{curtis2022cardioidsubs}.
         Jordan Cheer elaborates on the use of a `two source line array', which in essence is an Olson-style directional gradient loudspeaker, stating: `Two-source line arrays have been used in a variety of applications to generate localised listening zones and have also been used as a constituent element of larger arrays to achieve sound field control more generally.'\cite{cheer2015robustness}.
 
-
-    \section{Loudspeaker Construction}
+    \section{Contemporary Loudspeaker Construction Research}
         The prototype ACL has each low-frequency driver mounted in a shared, acoustically coupled enclosure.
         Robustness and efficiency of an acoustically coupled two-source superdirective array, an ICSV22 paper by Jordan Cheer, elaborates on the benefits of such a shared enclosure \cite{cheer2015robustness}.
         Cheer acknowledges how a superdirective array of loudspeakers have `high sensitivity to uncertainties in the assumed response of the system', and that regularization of the powered signal driving units in an array can improve the `robustness to uncertainty'.
@@ -192,7 +386,7 @@
         \end{figure}
         Whilst the model of LF driver and the cavity in which it is mounted in are different to the ACL, KEF's findings are applicable to the three-way coaxial design of the ACL and as such prompt further investigation into these `cavity resonances'.
 
-    \section{Quantifying Loudspeaker Directivity} 
+    \section{Previous Work on the Axisymmetric Cardioid Loudspeaker} 
         When describing a new, `holographic' near-field method of loudspeaker directivity measurement, Wolfgang Klippel and Christian Bellmann elaborate on the use of spherical harmonics as constituent solutions to the Helmholtz equation \cite{klippel2016holographic}.
         Whilst their paper focuses on the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments, the description of spherical harmonics
         
@@ -208,6 +402,8 @@
             \caption{FEM model of the ACL compared with Olson's first order unidirectional loudspeaker.}\cite{vedier}
             \label{vedierPolar}
         \end{figure}
+
+
 
 \chapter{Methodology}
     \section{Initial Transfer Function and Directivity Measurement}
@@ -230,7 +426,7 @@
         All audio output, robot arm movements and input recordings were automated through a MATLAB script.
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=1]{figs/speakerOnRobot.png}%
+            \includegraphics[width = 0.4\textwidth]{figs/speakerOnRobot.png}%
             \caption{The prototype loudspeaker mounted for testing in the University of Salford's fully anechoic chamber.}
             \label{speakerOnRobot}
         \end{figure}
@@ -241,11 +437,20 @@
         Upon first inspection of the data, anomalous and invalid pressure-over-frequency data was found at a number of angles, shown in Fig.\ref{allAngles}.
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.35]{figs/allAngles.png}%
+            \includegraphics[width = 0.6\textwidth]{figs/allAngles.png}%
             \caption{Noisy and anomalous data can be seen in the large blue and purple smears to the right. This data needed cleaning.}
             \label{allAngles}
         \end{figure}
         Manually cycling through each angle's driver frequency responses, anomalous data was manually averaged out using it's nearest angle neighbors.
+
+        \begin{figure}[H]
+            \centering
+            \hspace{2cm} \includegraphics[width = 0.6\textwidth]{figs/initialDirectivity.png}
+            \caption{The directivity of each driver in the ACL system.}
+            \label{initialDirectivity}
+        \end{figure}
+
+
 
     \section{Rear Driver Correction Filter Design}
         \subsection{Theory}
@@ -297,7 +502,7 @@
                 
                 end
             \end{lstlisting}
-
+            
             The resulting $a$ coefficients, while precise, were rough in envelope to the point that a closely matching filter would be unfeasible.
             This can be seen when plotting the immediately derived $a$ coefficients, shown in Fig.\ref{acoeffsNoSmooth}.
             \begin{figure}[H]
@@ -374,20 +579,6 @@
             Whilst FIR filters are guaranteed, by their finite nature, to decay to zero as stable filters, IIR filters are not, the poles of an IIR filter can lay beyond the unit circle leading to growth instead of decay in the impulse response \cite{litwin2000fir}.
             This can be problematic, and whilst \texttt{butter()}'s design procedure ensures the LPF will be stable the guaranteed stability of FIR filters as opposed to IIR filters was a major factor in choosing to implement $\gamma$ with an FIR filter. 
             It was also important to consider the causality of $\gamma$.
-            In DSP, causality refers to the relationship between the input and output signals of a system.
-            A causal filter is one in which the output at any given time is dependent only on past and current input values, and not on future input values.
-            In other words, the output of a causal filter can only be affected by events that have already occurred, and not by events that will occur in the future.
-            Causality is an important concept in digital filters, as it is necessary for filters to be causal in order to be physically realizable.
-            For example, if a filter were to rely on future input values to generate its output, it would require knowledge of events that have not yet occurred, which is not possible in a physical system.
-            A causal filter can be implemented using a variety of digital filter structures, such as finite impulse response (FIR) filters or infinite impulse response (IIR) filters.
-            FIR filters are inherently causal, as they rely only on past and current input values to generate their output.
-            IIR filters, on the other hand, may be non-causal, depending on their implementation; it is from this possibility of non-causality that designing an IIR filter to fit the complex magnitude response found in $\gamma$ becomes impractical. 
-            One further consequence of causality in digital filters is the existence of phase distortion.
-            When a causal filter is applied to a signal, the filter introduces a delay in the output signal relative to the input signal.
-            This delay results in a phase shift in the frequency domain, which can cause distortion in the output signal.
-            This phase distortion is particularly pronounced in FIR filters, which introduce a linear phase shift that is proportional to the filter's delay.
-
-In summary, causality is a fundamental concept in digital signal processing and is essential for the physical realizability of digital filters. Causal filters only rely on past and current input values to generate their output, which ensures that they do not require knowledge of future events. However, the introduction of delay in causal filters can result in phase distortion, which can affect the quality of the output signal.
 
             After the Butterworth LPF was generated, MATLAB's in-built texttt\ {freqz()} function was used to convert the LPF's $a$ and $b$ filter coefficients into a frequency-domain transfer function.
 
@@ -398,14 +589,6 @@ In summary, causality is a fundamental concept in digital signal processing and 
             As aforementioned, the inverse-FFT method of FIR filter design was ultimately used to generate a working $\gamma$ rear-driver correction filter.
             Using MATLAB's in-built \texttt{ifft()} function requires some considerations: The convolution is CIRCULAR NOT CIRCULAR PROS AND CONS.
 
-            The impulse response of a finite impulse response (FIR) filter is the sequence of filter coefficients that, when convolved with an input signal, produces the filter's output signal.
-            The length of the impulse response corresponds to the number of filter taps, which determines the filter's order. In an FIR filter, the impulse response is finite, meaning that it has a fixed length and eventually decays to zero.
-            One important characteristic of FIR filters is that the impulse response is always causal, meaning that the output of the filter at any given time depends only on past and current input values, and not on future input values. As a consequence of this causality, the impulse response of an FIR filter cannot extend infinitely into the past.
-            However, the impulse response of an FIR filter can extend infinitely into the future, or more precisely, it can wrap around from the end of the sequence to the beginning. This is known as circular convolution, and it occurs when the input signal is periodic. In other words, if the input signal repeats itself every N samples, then the convolution of the input signal with the filter impulse response will also repeat itself every N samples.
-            The concept of circular convolution is important in FIR filter design, as it allows us to treat the impulse response of an FIR filter as a circular buffer. This means that we can implement the filter using a delay line with N samples, where N is the length of the impulse response. The delay line holds the N most recent input samples, and the filter coefficients are applied to the samples in the delay line using circular indexing. This circular indexing ensures that the impulse response "wraps around" from the end to the beginning of the delay line, enabling us to implement the filter with a fixed number of multiply-accumulate operations per sample.
-            In summary, the impulse response of an FIR filter can "wrap around" from the end to the beginning, allowing us to implement the filter using circular convolution. This concept is important in FIR filter design, as it enables us to implement the filter with a fixed number of multiply-accumulate operations per sample, regardless of the length of the filter
-
-            
             COMPARE PHASE GRPAHS TO OLSONS PHASE GRAPHS (FIG 3)
             Olson:
             delay is given as d/2 and kD/2 makes the expression frequency dependent.
@@ -423,10 +606,7 @@ In summary, causality is a fundamental concept in digital signal processing and 
 
             Certain interactions between the front ad rear drivers will require the rear driver
 
-
-
     \section{Measurement Revisited, Post Filtering}
-
 
         \begin{figure}[H]
             \begin{minipage}{.49\textwidth}
@@ -441,10 +621,12 @@ In summary, causality is a fundamental concept in digital signal processing and 
             \end{minipage}
         \end{figure}
 
-
-
-
-
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\linewidth]{figs/filteredCombinedDirectivity.png}
+            \caption{Filtering the rear and measuring the combined system has shown some change in directivity response.}
+            \label{filteredCombinedDirectivity}
+        \end{figure}
 
 \chapter{Discussion and Conclusions}
 
