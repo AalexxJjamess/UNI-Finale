@@ -9,8 +9,9 @@
 \usepackage[numbered,framed]{matlab-prettifier}
 \usepackage{tikz}
 \usepackage{pdfcomment}
+\newcommand{\matr}[1]{\mathbf{#1}} % undergraduate algebra version
 
-\title{Sound Field Control with a Coaxial, Cardioid, Axisymmetric Loudspeaker}
+\title{Optimization of an Axisymmetric, Cardioid Loudspeaker}
 \author{Alex Booth, supervised by Jonathan Hargreaves\\ a.booth9@edu.salford.ac.uk}
 
 \begin{document}
@@ -25,7 +26,7 @@
     \hrule
     \vspace{3cm}
 %Thesis title
-    {\uppercase{\Large Sound Field Control with an Axissymetric, Cardioid Loudspeaker\par}}
+    {\uppercase{\Large Optimization of an Axisymmetric, Cardioid Loudspeaker in the Context of Sound Field Control\par}}
     \vspace{3cm}
 %Author's 
     {\Large Alex Booth, supervised by Dr. Jonathan Hargreaves\par}
@@ -39,10 +40,33 @@
 \end{center}
 \clearpage
 
-\chapter*{Declaration}
+\begin{abstract}
+    This dissertation describes an investigation into the real-world directivity over frequency of a prototype axisymmetric, cardioid loudspeaker.
+    Far-field directivity measurements of this prototype loudspeaker were taken and analyzed.
 
-\chapter*{Abstract}
-    \textit{}
+    From this analysis a metric of cardioid directivity was derived, the metric was used to construct a digital filter that would aim to encourage cardioid directivity across the low-frequency range of the prototype loudspeaker.
+    Suggestions are made as to how the filtered loudspeaker may be used as an effective tool of sound field control, with particular attention paid to loudspeaker use in contemporary sound field control literature.
+
+    The filter is shown to analytically behave as expected with some promising combined directivity performance results.
+    However, the scope of these tests was ultimately time limited, and suggestions for further work and investigations are given.
+\end{abstract}
+
+\chapter*{Declaration}
+    I, Alex Booth, declare that the contents of this dissertation, `Optimization of an Axisymmetric, Cardioid Loudspeaker' and the work presented in the dissertation are my own.
+    I confirm that:
+
+    \begin{itemize}
+        \item{This work was undertaken, analyzed and written wholly whilst in candidature for a Bachelor's degree at the University of Salford}
+        \item{Where I have consulted the work, published or not, or others, this is clearly attributed and referenced.}
+        \item{Where I have quoted from the work of others, the source is given.}
+        \item{With the exception of the aformentioned other's work, this dissertation is entirely my own work.}
+    \end{itemize}
+    \vspace{5cm}
+
+    Signature: \hrulefill
+
+    \vspace{2cm}
+    Date: \hrulefill
 
 \chapter*{Acknowledgements}
     I give my sincerest thanks to Liliana, for taking an enthusiastic, supportive interest, helping me stay positive and confident as I studied, investigated and wrote on this topic.
@@ -50,37 +74,35 @@
     These thanks also extend to Jonathan, my supervisor, for being a constant and reliable source of support and guidance throughout the entire academic year.
     Without his help, this dissertation would not be up to the standard it is.
 \tableofcontents
-\listoffigures
+
 \newpage
 
 \chapter{Introduction}
     The Audio Engineering Society (AES) defines sound field control as the `process of creating a set of loudspeaker signals to create a certain listening experience over a listening area' \cite{AESsoundfieldcontrol}.
     The directionality of a loudspeaker can be a definitive tool of active sound field control; directional configurations, such as line arrays or subwoofers arranged to give cardioid directivity, are commonplace in live entertainment.
 
-    An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the Universtiy of Salford.
+    An axisymmetric, cardioid loudspeaker has been constructed by Jonathan Hargreaves in association with students at the University of Salford.
     This loudspeaker consists of a perspex cylindrical two-driver coupled cabinet with drivers mounted at either end of the cylinder, and a KEF Uni-Q mid-high driver mounted coaxially with the `front' end of the cylindrical body.
-    A diagram of the system is give in Fig.SPEAKER DIAGRAM.
-
-    RESEARCH PROBLEM
-    The main goal of the work described in this paper was to bring the axisymmetric, cardioid loudspeaker (ACL for the rest of this paper) into a physical testing environment, and from that testing environment, determine suitable signal processing to achieve optimal low-frequency cardioid directivity.
+    A diagram of the system (mounted on a testing rig) is given in Fig. \ref{speakerDiagram}.
+   
+    The overall goal of the work described in this paper was to bring the axisymmetric, cardioid loudspeaker (ACL for the rest of this paper) into a physical testing environment, and from that testing environment, determine suitable signal processing to achieve optimal low-frequency cardioid directivity.
     Attention was paid to previous work on the ACL, and facets of this previous work informs the signal processing investigated in this report.
-    SIGNIFICANCE
+
+    As the ACL employs a pair of front and rear facing LF drivers with a cabinet of quarter-wavelength distance between the two, the ACL will already have some cardioid characteristics around this corresponding frequency for this wavelength.
+    To improve and widen the range of cardioid directivity in the low frequency range was the specific objective of the project described by this report. 
+    This will be elaborated upon in the Theory, Literature Review and Methodology sections.
     Once the ACL is brought to a working stage by this project, further investigation into it's suitability for sound field control and other applications can take place.
 
-    LIMITATIONS
     The described project is one in a more numerous collection of student works on this ACL, and as so these works are somewhat fragmented.
-    Furthermore, the precise directivity predicted to be achieved by this loudspeaker may not have any current practical applications maybe?????
-
-    STRUCTURE
-
-    THE SPEAKER ITSELF AND HOW EACH DRIVER PERFORMS
+    A large heavy prototype may be hard to test and would not be particularly practical in the real world.
+    The prototype serves as a proof of concept, however, that may be used to inspire more practical designs in future. \pdfcomment{I'd like to expand or improve my introduction a bit. Any tips?}
 
 
 \chapter{Background and Theory}
     \section{Sound Field Control and it's Applications}
         Sound field control is commonplace practiced at major outdoor and indoor audiovisual events.
         Controlling the directivity of loudspeaker-radiated sound at an outdoor event is vital to both ensure even distribution of experience to an audience, and isolation of neighbors from noise pollution.
-        PA loudspeakers are thus designed such that they can be effective not only at producing high sound pressure levels and consistently clear frequency responses, but also effective at controlling a sound field.
+        PA loudspeakers are thus designed such that they can be effective not only at producing high sound pressure levels and consistently clear frequency responses, but also effective at controlling a sound field. \pdfcomment{This `theory' section serves more as a brief introduction to each theory, the ore detailed use of each theory is explained in lit. review and methodoology.}
 
         \begin{figure}[H]
             \centering
@@ -113,6 +135,12 @@
         Coaxially mounted to the front face of the cylinder is a KEF Uni-q coaxial driver with a 3D-printed waveguide.
         Coaxial driver configurations are a design choice that leads to axisymmetry in driver directivity, that is, the driver may be rotated about the axis of coaxial mounting and no phase shift between woofer and tweeter at the crossover point will be introduced, as the distance between the listener and both drivers remains constant.
 
+        Each driver in the unit requires it's own dedicated amplifier channel.
+        This configuration, as opposed to a passive crossover, is becoming more and more prevalent as cheap, low THD and compact class-D amplifiers and DSP (filtering) chips allow multiple amplifiers to be built in to a loudspeaker unit's enclosure, allowing an input to be digitally crossed-over at the input stage for each driver before the amplification stage.
+        However, none of this integrated amplification or crossover functionality is built in to the ACL.
+        Instead, the ACL simply receives raw amplified input to each driver.
+        The Uni-q mid-high driver requires a cross-over before testing however, as excessive LF input may damage or introduce non-linearity to the driver's response.
+
         Loudspeaker systems aiming to achieve good power efficiency at low frequencies will often employ a vented design.
         This is where a tuned, often cylindrical vent (as seen in Fig. \ref{hs-7back}), is mounted to a wall of the cabinet allowing air and thus acoustic pressure waves to flow out of the cabinet in a controlled manner.
         The tuning of the vent will encourage the pressure radiation from the vent to be in-phase with frontal radiation of the driver such that low-frequency response is boosted instead of destructively interfered with like in a loudspeaker hanging in free space.
@@ -129,6 +157,13 @@
         The ACL is in fact not purely any of the aforementioned configurations, instead it leans mostly towards a passive radiator based design, with two \textit{active} drivers mounted within a shared, or acoustically coupled, enclosure.
         Contrary to this, most multi-driver loudspeakers will have each active driver mounted in acoustically sealed and separate chambers.
         This design choice for the ACL is based on contemporary research which will be elaborated upon in the literature review.
+
+        The length of the cylindrical coupled enclosure is set to 0.63 meters, shown in Fig. \ref{speakerDiagram}.
+        This corresponds to a quarter-wavelength of 139Hz, which is significant as this distance between a pair of loudspeaker drivers, as is demonstrated by Harry Olson, allows for a 180-degree phase relationship between the front and rear LF drivers \cite{olson1973gradient}.
+        This, theoretically, should give perfect cancellation, however real-world testing will show that it is not this simple.
+
+        The shape of a loudspeaker enclosure and where a driver is mounted in this enclose may have an effect on the performance of the loudspeaker.
+        Olson's paper `Direct Radiator Loudspeaker Enclosures' comments on the performance on cylindrical enclosures, his findings are shown in Fig. \ref{olsonCylinder} and elaborated upon in the Literature Review.
 
         Whilst loudspeaker design typically employs the use of equivalent circuit analogies, as shown in Fig. \ref{equivalentCircuit}, this project does not suggest any alterations to the physical construction of the loudspeaker system and as such the equivalent circuit of the system is of note, but not particularly relevant to this report.
         
@@ -215,7 +250,7 @@
         \end{figure}
         
         In this project, a finite impulse response (FIR) filter is derived in order to fit a certain frequency and phase response required at the rear driver such that the combined response of the front and rear driver is cardioid.
-        A FIR filter is named over the fact that it's time-domain impulse response is finite-length and eventually decays to zero.
+        A FIR filter is named over the fact that it's time-domain impulse response is finite-length and eventually decays to zero \cite{litwin2000fir}.
         The length of the FIR filter's impulse response corresponds to the number of filter taps, determining the filter's order.
         FIR filters have no $a$ coefficients, instead only having $b$ coefficients.
         The samples in the impulse response of the FIR filter \textit{are} the $b$ coefficients of the filter.
@@ -250,15 +285,6 @@
 
         
 \chapter{Literature Review}
-    AUTHOR'S PROBLEM
-    KEY CONCEPTS IN SOURCE
-    KEY THEORIES
-    DO THEY INNOVATE OR REFINE?
-    CONCLUSIONS?
-    HOW DOES IT RELATE TO OTHER LITERATURE?
-    STRENGTHS?
-    WEAKNESSES?
-
     \section{Investigations into the Use of Loudspeakers in Sound Field Control}
 
         Indoor sound field control techniques are explored by Ole Kirkeby and Philip A. Nelson in `Reproduction of Plane Wave Sound Fields' \cite{kirkeby1993reproduction}.
@@ -285,16 +311,19 @@
         Franz M. Heuchel, Diego Caviedes-Nozal, Jonas Brunskog, et al. explore outdoor sound field control in their paper: `Large-scale outdoor sound field control' \cite{heuchel2020large}.
         The authors investigate the low-frequency directivity performance of loudspeaker systems across atmospherically varying outdoor spaces, as opposed to the linear, homogenous, and isotropic conditions often assumed indoors.
         This paper contains many points of interest for this project, beginning with employing Kirkeby and Nelson's pressure matching method \cite{kirkeby1993reproduction} to derive an optimal filter to apply to the `control' loudspeakers providing the active cancellation that gives a zone of sound field control.
-        This optimal filter is generated using the inverse fast Fourier transform method (IFFT), the same technique as is used in the ACL project.
+        This optimal filter is generated using the inverse fast Fourier transform method (IFFT), the same technique as is used in this ACL project.
         
         Spherical harmonics are also employed to create a sound propagation model, in which the generating loudspeakers are assumed to be axisymmetric.
-        However, the spherical harmonics used are of a higher order than those utilized in this project.
-        \begin{equation}
-            \hat{h}(\m)
-
-        \end{equation}
-        Ultimately Heuchel, Caviedes-Nozal, Brunskog, et al. find that using active control systems is effective in sound field control in large outdoor environments, but note that varying meteorological conditions must be accounted for in real time, as expected.
+        However, the spherical harmonics used are of a higher order than those utilized in this project. 
+        Heuschel et al. use Jacobsen and Juhl's model for expressing sound propagation in spherical coordinates, seen in Eq. \ref{heuchelSpherical}.
         
+        \begin{equation}
+            \hat{h}(\matr{r},\matr{a}) = \Sigma_{m=0}^{M}a_m h_m^{(2)}(kr)P_m(\cos(\theta)) \cite{jacobsen2013fundamentals}
+            \label{heuchelSpherical}
+        \end{equation}
+
+        Ultimately Heuchel, Caviedes-Nozal, Brunskog, et al. find that using active control systems is effective in sound field control in large outdoor environments, but note that varying meteorological conditions must be accounted for in real time, as expected.
+        More importantly, their work involves the use of a loudspeaker specification and directivity measurement that is very close to that which is investigated in this project.
 
     \section{Historical Directional Loudspeaker Designs}
 
@@ -304,17 +333,20 @@
         Higher orders introduce directionality; a first-order unidirectional loudspeaker constructed with a spaced and delayed pair of zero-order gradient speakers operating 180\degree\@ out of phase gives a cardioid response.
         The delay between both drivers is fixed across all frequencies.
         Olson gives the radiated pressure of this unidirectional gradient loudspeaker, shown in Eq.\ref{olsonFirstOrderPressure}.
+
         \begin{equation}
             p = 2CU_f\cos{kct}[\sin{\frac{kd}{4}+\frac{kD}{4}\cos{\theta}}]
             \label{olsonFirstOrderPressure}
             \cite{olson1973gradient}
         \end{equation}
+
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.4]{figs/olsonFirstOrder.png}%
             \caption{Olson's first order unidirectional loudspeaker.}\cite{olson1973gradient}
             \label{olsonFirstOrderDiagram}
         \end{figure}
+
         Olson states that if the distance between the drivers, $D$ equals $d$, the distance delay introduced and seen in Fig.\ref{olsonFirstOrderDiagram}, the directivity of the system will be cardioid.
         The wavenumber, $k$, found in Eq.\ref{olsonFirstOrderPressure}, introduces a frequency dependence to the $D=d$ condition.
         Figure \ref{olsonFirstOrderDirectivity} shows that across a range of frequencies, a cardioid polar pattern is maintained, albeit with slight differences.
@@ -337,137 +369,226 @@
         Line arrays would go on to be a principle tool of sound field control in the modern day, but gradient loudspeakers are still, relative to line arrays, uncommon.
         Cardioid subwoofer systems used in live audio are common implementations of gradient loudspeaker designs.
         These subwoofers can be sold as gradient loudspeakers themselves, often with switchable directivity patterns; audio engineers will also arrange standard, omnidirectional subwoofers into configurations that introduce a phase delay sufficient to create a cardioid directivity pattern~\cite{curtis2022cardioidsubs}.
+        
+        Olson's 1969 paper `Direct Radiator Loudspeaker Enclosures' comments on the frequency-domain performance of a cylindrical loudspeaker cabinet construction \cite{olson1969direct}.
+        Whilst this paper does not deal with explicitly directional loudspeakers, it gives a useful insight to any frequency-domain effects that may affect the phase relationship between the front and rear LF driver of the ACL.
+        Figure \ref{olsonCylinder} shows a degree of comb filtering introduced above 600Hz.
+        The paper also describes frequency response measurements of various other loudspeaker enclosure shapes and finds similar effects in cuboid end-fire loudspeakers, suggesting the shape of the frequency response may be related to the end-fire nature of loudspeaker driver placement within an enclosure.
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.7\linewidth]{figs/olsonCylinder.png}
+            \caption{Olson's testing finds the frequency response of an end-fire cylindrical loudspeaker.}
+            \label{olsonCylinder}
+        \end{figure}
+
+        Olson finds that a spherical enclosure gives the least (linear) frequency-domain distortion, this may be a cabinet construction worth investigating for an ACL in the future. 
+
         Jordan Cheer elaborates on the use of a `two source line array', which in essence is an Olson-style directional gradient loudspeaker, stating: `Two-source line arrays have been used in a variety of applications to generate localised listening zones and have also been used as a constituent element of larger arrays to achieve sound field control more generally.'\cite{cheer2015robustness}.
 
-    \section{Contemporary Loudspeaker Construction Research}
+    \section{Contemporary Directional Loudspeaker Constructions}
         The prototype ACL has each low-frequency driver mounted in a shared, acoustically coupled enclosure.
         Robustness and efficiency of an acoustically coupled two-source superdirective array, an ICSV22 paper by Jordan Cheer, elaborates on the benefits of such a shared enclosure \cite{cheer2015robustness}.
         Cheer acknowledges how a superdirective array of loudspeakers have `high sensitivity to uncertainties in the assumed response of the system', and that regularization of the powered signal driving units in an array can improve the `robustness to uncertainty'.
+        
         However, he further notes that these measures may limit the directivity of a such a system; counterproductive to the designed purpose of a superdirective array.
         Robustness and efficiency thus sets out to investigate the robustness of acoustically coupled two-source superdirective loudspeaker, as opposed to the previously investigated non-interacting directional loudspeakers.
         Cheer finds, using a two-port model of loudspeaker behavior and derived simulations, that an uncoupled two-source array is `more significantly affected by response uncertainties than the coupled array', and thus the coupled array is more robust, avoiding the need for regularization.
+        
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.5]{figs/cheerGraph.png}%
             \caption{Cheer's plots comparing acoustically coupled and uncoupled loudspeaker systems.}\cite{cheer2015robustness}
             \label{cheerGraph}
         \end{figure}
+
         Cheer's figure \textit{a} (Fig.\ref{cheerGraph}) shows that when a constraint (to use the same electrical power as the coupled array) is applied to an \textit{un}-coupled two-source superdirective loudspeaker it loses a significant degree of acoustic contrast.
-
-        SHAUN NIELSEN
-
-        A BIT MORE HERE?
-        Considering Cheer's findings, prior to the work this dissertation describes, the ACL was constructed with an acoustically coupled main chamber for the LF drivers.
-
+        Considering Cheer's findings, the ACL was constructed with an acoustically coupled main chamber for the LF drivers.
         All the drivers used in the ACL are designed by KEF and used in their commercially available products, but in different cabinet configurations to the ACL.
-        However, KEF have a commercialy available ceiling-mounted loudspeaker that utilizes an LF driver with a Uni-Q coaxially mounted: The Ci250RRM-THX.
+        However, KEF have a commercialy available ceiling-mounted loudspeaker that utilizes an LF driver with a coaxially mounted Uni-Q: The Ci250RRM-THX.
+        
         \begin{figure}[H]
             \begin{minipage}{.49\textwidth}
                 \includegraphics[width=\linewidth]{figs/KEFpressure.png}%
                 \centering
-                \caption{}
+                \caption{Frequency response of a LF driver with a close-back Uni-Q mounted coaxially.}
                 \label{KEFpressure} \cite{KEFCi}
             \end{minipage}
             \begin{minipage}{.49\textwidth}
                 \includegraphics[width=\linewidth]{figs/KEFdiagram.png}%
                 \centering
-                \caption{ } \cite{KEFCi}
+                \caption{KEF's Diagram of the Ci250RRM-THX}\cite{KEFCi}
                 \label{KEFdiagram}
         \end{minipage}
         \end{figure}
+
         KEF found that such a three-way loudspeaker design with the LF driver mounted in a cavity to the rear of the mid-high introduces resonances, determined by the size and shape of the cavity \cite{KEFCi}.
         Figure \ref{KEFpressure} shows a dip in sound pressure between 800Hz to 1KHz; KEF remedy this by designing the Ci250RRM-THX to use an open-backed Uni-q midrange.
         KEF call this `Cavity Radiation Control', and they show, in Fig. \ref{KEFopenback}, that the 30-plus dB cancellation around 800Hz to 1KHz is eliminated.
+
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.5]{figs/KEFopenback.png}
+            \includegraphics[scale=0.8]{figs/KEFopenback.png}
             \caption{Changing the Uni-Q to an open back design.}\cite{KEFCi}
             \label{KEFopenback}
         \end{figure}
+
         Whilst the model of LF driver and the cavity in which it is mounted in are different to the ACL, KEF's findings are applicable to the three-way coaxial design of the ACL and as such prompt further investigation into these `cavity resonances'.
 
-    \section{Previous Work on the Axisymmetric Cardioid Loudspeaker} 
+    \section{Characterizing Directivity with Spherical Harmonics} 
         When describing a new, `holographic' near-field method of loudspeaker directivity measurement, Wolfgang Klippel and Christian Bellmann elaborate on the use of spherical harmonics as constituent solutions to the Helmholtz equation \cite{klippel2016holographic}.
-        Whilst their paper focuses on the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments, the description of spherical harmonics
+        However, the main objective of the paper focuses on describing the holographic directivity measurement method's effectiveness at reducing the space requirements of anechoic listening environments.
+        Klippel and Bellmann state that by using a spherical coordinate system the solution to the Helmholtz equation may be separated into radial and angular functions, which then form an orthogonal set of base solutions to spherical wave propagation.
+
+        Importantly, Klippel and Bellmann, like Heuschel et al., give a spherical-harmonics based series of base solutions as an expansion of the transfer function between an acoustic input $u$, and the recieved pressure in the frequenecy domain.
+        This series is given in Eq. \ref{klippelEq}.
+
+        \begin{equation}
+            H(f,\matr{r}_E) = \Sigma_{n=0}^{N(f)}\Sigma_{m=-n}^{n}C_{mn}(f) \cdot h_n^{(2)}(kr_E)Y_n^m(\theta_E,\varPhi_E)\cite{klippel2016holographic}
+            \label{klippelEq}
+        \end{equation}
+
+        Hankel functions of the second kind are used in Eq. \ref{klippelEq} to describe the phase and amplitude of spherical waves propagating away from the acoustic source.
         
-        The project described in this dissertation builds on previous work not only by the supervisory but also by other (former) students of the University of Salford.
-        During the COVID-19 lock-down period the acoustic properties of the prototype loudspeaker were modelled with computer simulations.
+        The project described in this dissertation builds on previous work not only by the supervisor but also by other (former) students of the University of Salford.
+        During the COVID-19 lock-down period the acoustic properties and directivity of the ACL were modelled using the finite element method (FEM).
+        
         Paul Vedier carried out these simulations as part of his Master's dissertation.
-        A metric derived by Vedier, is used to quantify cardioid directivity and will be utilized to achieve the practical aims of correcting for cardioid directivity over all frequencies in the ACL.
+        A metric derived in Vedier's dissertation, is used to quantify cardioid directivity and will be utilized to achieve the practical aims of correcting for cardioid directivity over all frequencies in the ACL.
         Vedier's paper confirms, using COMSOL, that the ACL has the properties of an Olson-style gradient loudspeaker.
         In Fig.\ref{vedierPolar} Vedier compares FEM analysis of two fully-modelled membranes in a cabinet and compares to Olson's analytical method.
+        
         \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.5]{figs/vedierPolar.png}
-            \caption{FEM model of the ACL compared with Olson's first order unidirectional loudspeaker.}\cite{vedier}
+            \includegraphics[scale=0.4]{figs/vedierPolar.png}
+            \caption{FEM model of the ACL compared with Olson's first order unidirectional loudspeaker \cite{vedier}.}
             \label{vedierPolar}
         \end{figure}
 
+        Vedier's paper describes a reduction of a series of spherical harmonic based solutions to the Helmholtz equation, like those described in Klippel and Bellmann's and Heuschel et al.'s papers.
+        By accounting for anechoic conditions, an axisymmetric loudspeaker construction and far-field measurement, the zero and second order spherical harmonics were reduced to a pair of coefficients.
+        The use of these coefficients to form a metric of cardioid directivity will be outlined in the methodology section of this report.
+        It should be noted that Vedier's simulations did not model nor account for the coaxially mounted Uni-Q driver, so some inaccuracy to real-world performance, influenced by early reflections LF on the back of the Uni-Q's enclosure, is to be expected.
 
-
-\chapter{Methodology}
+\chapter{Methodology, Results and Analysis}
     \section{Initial Transfer Function and Directivity Measurement}
-        SPEAKER WAS PUT IN THE ANECHOIC
-        To build a numerical analysis of the directivity of the axisymmetric loudspeaker system's behavior as a whole over all frequencies, the frequency-domain transfer function of each driver must be measured across the entire X-Y AXIS MAYBE.
-        In order to create a precise and accurate measurement free of interference and noise, the drivers were measured, mounted in the loudspeaker unit, in a fully anechoic chamber with a NTi reference-grade measurement mic.
-        Ensuring the angle interval of each measurement was consistent, the loudspeaker was mounted to a Four Audio ELF robot arm which rotated the loudspeaker system about the X-Y AXIS MAYBE.
-        Swept sine input signals were fed to each driver as the input excitation.
-        The two low-frequency drivers were fed by a Samson SERVO-500 power amplifier, whilst the mid-high driver was fed by a University of Salford in-house made mono power amplifier, a 'Dial-a-Watt'.
+        To build a numerical analysis of the directivity of the axisymmetric loudspeaker system's behavior as a whole over all frequencies, the frequency-domain transfer function of each driver must be measured across a 360-degree rotation of the $\beta$ angle shown in Fig. \ref{sphericalCoords}, where the front of the ACL is pointing in the Z-direction.
+        In order to create a precise and accurate measurement free of interference and noise, the drivers were measured, assembled and mounted in their enclosures, in a fully anechoic chamber with a NTi reference-grade measurement mic.
+
+        Ensuring the angle interval of each measurement was consistent, the loudspeaker was mounted to a Four Audio ELF robot arm which rotated the loudspeaker system about the $\beta$ angles.
+        Swept sine excitation signals were fed to each driver as the input excitation.
+        The output of the loudspeaker was recorded by an omnidirectional NTi measurement microphone and de-convolved from the excitation signal (recorded in a loop-back channel).
+        This produced an impulse response for the loudspeaker's radiation in the anechoic chamber.
+        A fourier transform of this impulse response was then taken, in MATLAB, to analyze the frequency response of the loudspeaker.
+
+        Using swept sinusoidal waves as an input excitation for acoustic and loudspeaker measurements is an established technique \cite{loudspeakersANSI}.
+        It allows for precise measurement of the entire frequency response of a loudspeaker as the sine wave input sweeps from zero hertz to the Nyquist limit.
+        Sine sweeps are, however, vulnerable to environmental interference or interrupting noise throughout the duration of the sweep.
+        The extreme acoustic isolation and lack of reflectivity in the anechoic chamber give good conditions for the avoidance of any such outside interference.
+
+        Other methods of loudspeaker performance measurement exist, for example pink noise may be used as an excitation signal instead of swept sine waves. 
+        Near field measurements of loudspeaker performance are also possible.
+        Klippel GmbH offers a `3D Near Field Scanner' which they claim can give `Directivity, sound power, SPL response and many more key figures for any kind of loudspeaker' \cite{klippelNFS}.
+        This near field scanner system also allows `holographic' spherical harmonic based directivity measurements, as outlined in Klippel and Bellmann's aforementioned paper \cite{klippel2016holographic}. 
+        Ultimately, a swept-sine based directivity measurement technique using the Four Audio ELF robot arm was implemented.
+
+        The two low-frequency drivers were fed by a Samson Servo-500 power amplifier, whilst the mid-high driver was fed by a University of Salford in-house made mono power amplifier, a 'Dial-a-Watt'.
         The output of the Dial-a-Watt was fed to a KEF-made cross-over, splitting the signal into mid and high frequency bands for the coaxial Uni-Q's mid and high drivers.
         The low frequency drivers had no cross-over filtering applied at this stage of the testing.
         The full signal flow of the transfer function measurement system is shown in Fig.\ref{signalFlow}.
+
         \begin{figure}[H]
             \centering
             \includegraphics[scale=0.04]{figs/signalFlow.png}%
             \caption{Signal flow of driver transfer function measurement}
             \label{signalFlow}
         \end{figure}
+        \newpage
 
-        All audio output, robot arm movements and input recordings were automated through a MATLAB script.
+        All audio output, ELF robot arm movements and input recordings were automated through a MATLAB script, implementing API calls to the ELF robot and handling all audio buffer manipulation.
+
         \begin{figure}[H]
             \centering
             \includegraphics[width = 0.4\textwidth]{figs/speakerOnRobot.png}%
             \caption{The prototype loudspeaker mounted for testing in the University of Salford's fully anechoic chamber.}
             \label{speakerOnRobot}
         \end{figure}
-        A Bruel \& Kjaer measurement microphone placed 3.6m away was used to record relative sound pressure levels radiating from the loudspeaker drivers for each frequency at 121 angles.
 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width = 0.9\textwidth]{figs/speakerDiagram.png}%
+            \caption{The axisymmetry of the ACL about the $\alpha$ allows for only measurements about the $\beta$ axis to be necessary.}
+            \label{speakerDiagram}
+        \end{figure}
+        \newpage
+
+        An NTi measurement microphone placed 3.6m away was used to record relative sound pressure levels radiating from the loudspeaker drivers for each frequency at 120 different angles, giving a resolution of three degrees of the $\beta$ axis per measurement.
         The raw results from this measurement were immediately processed; the dataset was large in file size and unwieldy to work with in MATLAB, so the data was reduced in size by taking only every 16th frequency point from the original, unnecessarily large frequency resolution.
         This had no apparent affect on the accuracy or validity of the measurements.
+
         Upon first inspection of the data, anomalous and invalid pressure-over-frequency data was found at a number of angles, shown in Fig.\ref{allAngles}.
+        Manually cycling through each angle's driver frequency responses, anomalous data was manually averaged out using it's nearest angle neighbors.
+
         \begin{figure}[H]
             \centering
             \includegraphics[width = 0.6\textwidth]{figs/allAngles.png}%
-            \caption{Noisy and anomalous data can be seen in the large blue and purple smears to the right. This data needed cleaning.}
+            \caption{Noisy and anomalous data can be seen in the large blue and purple smears to the right.}
             \label{allAngles}
         \end{figure}
-        Manually cycling through each angle's driver frequency responses, anomalous data was manually averaged out using it's nearest angle neighbors.
-
+        
         \begin{figure}[H]
             \centering
             \hspace{2cm} \includegraphics[width = 0.6\textwidth]{figs/initialDirectivity.png}
             \caption{The directivity of each driver in the ACL system.}
             \label{initialDirectivity}
         \end{figure}
+        \newpage
 
+        In hindsight, it would have been more reliable to take a larger number of measurements and find an average over a range of say, a series of twenty measurements, instead of simply averaging an anomalous result with it's angular neighbors.
+        However, significant measurement program and signal chain errors were a consistent problem in measurement.
+        As so, the number of required measurements to obtain a sufficient level of averaging to smooth out all anomalous results may become impractical.
 
+        Note that the measurements of each driver were taken separately; the cardioid directivity of the LF drivers should be present in their \textit{combined} response.
+        Figure \ref{initialDirectivity} does however show a good cardioid directivity pattern for the coaxially mounted KEF Uni-Q.
+
+        The lobing present on the LF driver's directivity response at 1000Hz is to be expected, when inspecting the directivity response below 500Hz the LF drivers behave closer to monopoles.
+        However, a clear bias toward the 270 degree measurement angle is also shown, in both the front and rear woofers.
+        This may be a cause for concern when designing the rear driver correction filter, however the correction filter may also be used to correct this discrepancy.
+
+        The radiated pressure from the rear driver is shown to be much lower than the front LF driver, this may be due to the fact that the mounting plate for the ELF robot arm was directly over the rear LF driver.
+        The coaxial Uni-Q mid high was however mounted over the front driver so this might not be the cause of such a drastic difference, albeit without a protruding metal robot arm in the way.
+        Amplifier channels were set to match and the exact same test signal was used for all three drivers, so human experimental set-up error cannot explain the lower rear LF radiation.
 
     \section{Rear Driver Correction Filter Design}
-        \subsection{Theory}
-            The radiation of the rear driver of the ASL needs to have a particular phase and frequency relationship to radiation of the front driver.
-            It is important to note that in order to maintain cardioid directivity across all frequencies, the frequency and directivity response of the rear driver in relation to the front driver must be accounted for.
+        \subsection{Spherical Harmonic based Metric and Correction Filter}
+            The radiation of the rear driver of the ASL needs to have a particular phase relationship over frequency to radiation of the front driver in order to maintain the rear cancellation required for a cardioid directivity pattern.
+            
+            Using a metric of cardioid directivity given by Jonathan Hargreaves, previously used and elaborated upon in Vedier's paper, a digital filter was derived to encourage cardioid directivity across the working frequency range of the LF drivers \cite{vedier} \cite{hargreaves2020spherical}.
+            When devising this metric, only the zeroth and first spherical harmonics were considered, as a purely cardioid directivity can be described in three dimensions using only these harmonics \cite{vedier}.
 
-            Using the metric of cardioid directivity given by Jonathan Hargreaves, previously used and elaborated upon in Vedier's paper, a digital filter was used to encourage cardioid directivity across the working frequency range of the LF drivers \cite{vedier}.
-            When devising this metric, only the zeroth and first spherical harmonics were considered, as a true cardioid directivity can be described in three dimensions using only these harmonics.
             Incorporating higher order spherical harmonics in to a newer, more precise directivity metric may be useful in a further investigation of the non-cardioid directivity behavior of the ACL, but were beyond the scope of this filter design.
-            Vedier's work derives a pair of coefficients $a_0$ and $a_1$ from a more general solution to spherical wave propagation, further stating that if these $a_n$ coefficients are equal, then the radiated pressure waves' directivity must be spherical.
-            Using Eq.\ref{a0a1} to find the coefficients $a_0$ and $a_1$ for the front and rear drivers.
-            Equation \ref{sphericalPressure}.\ shows how spherical harmonic coefficients can be expressed as a function of pressure over spherical angles, where the $R$ term accounts for any residual directivity.
+            Vedier's work derives a pair of coefficients $a_0$ and $a_1$ from a more general solution to spherical wave propagation, further stating that if these $a$ coefficients are equal, then the radiated pressure waves' directivity must be cardioid.
+
+            Equation \ref{sphericalPressure} shows how spherical harmonic coefficients can be expressed as a function of pressure in the far field, $p_{ff}$, over spherical angles, where the $R$ term accounts for any residual directivity.
+
             \begin{equation}
                 p_{ff}(\beta,\alpha) = a_0 + a_1 \cos(\beta) + R(\beta,\alpha)
                 \label{sphericalPressure}
                 \cite{hargreaves}
             \end{equation}
+            
+
+            Using Eq.\ref{a0a1} the coefficients $a_0$ and $a_1$ can be found for the front and rear drivers.
+            Both $a_0$ and $a_1$ are derived from terms in a spherical harmonic series, as aforementioned in the literature review.
+            However, this series accounts for axisymmetry in the loudspeaker, and thus neither $a_0$ nor $a_1$, neither of which are dependent on the spherical coordinate angle $\alpha$, can be found as terms in this series.
+            This series is given in Eq. \ref{jonSeries}.
+            
+            \begin{equation}
+                p_{ff}(\beta,\alpha,\omega) = \frac{1}{ik} \Sigma_{n=0}^{\infty}i^{-n}b_{0,n}(\omega)\sqrt{\frac{2n+1}{4\pi}}P_n(\cos(\beta))
+                \label{jonSeries}
+                \cite{hargreaves}
+            \end{equation}
+
             \begin{equation}
                 \begin{split}
                     a_0(\omega) &= \frac{1}{ikh_0^{(1)}(kr_{meas})} \sqrt{\frac{1}{4\pi}} c_{0,0}(\omega) \\
@@ -475,10 +596,15 @@
                     \label{a0a1}\cite{hargreaves}
                 \end{split}
             \end{equation}
-            Equation \ref{a0a1} utilises spherical Hankel functions of the first kind, which are a combination of a Hankel function of the first kind and a spherical Bessel functions of the first and second kind \cite{weisstein}.
+
+            Equation \ref{a0a1} uses spherical Hankel functions of the first kind, which are a combination of a Hankel function of the first kind and a spherical Bessel functions of the first and second kind \cite{weisstein}.
             The complex exponential component of the given spherical Hankel function characterizes the outwards propagation and decay of a spherical wave; the negative-signed $-e^{ikt}$ component is in contrast to the rest of the positive-signed complex exponentials in the filter generation script.
             Therefore to keep the complex exponential's signs consistent, the complex conjugate of the defined spherical Hankel functions is taken before their use in any calculations.
             The Hankel functions used are defined in Eq.\ref{hankel}, and are derivatives of those given by Wolfram \cite{weisstein}.
+
+            Assuming far-field conditions of measurement allows all directivity terms (spherical harmonics) to be assumed to decay like a monopole.
+            This removes any distance dependencies on the overall directivity function, Eq. \ref{sphericalPressure}.
+
             \begin{equation}
                 \begin{split}
                     h_0^1 &= -i  e^{ikr}  \frac{1}{kr} \\
@@ -489,8 +615,9 @@
 
             Conceptually, if the $a_0$ and $a_1$ coefficients are equal, the directivity pattern will be cardioid.
             It should be noted that the response of the $a$ coefficients above 500Hz is mostly irrelevant, as the LF drivers will be filtered out in favour of the Mid-High, which has a favorably cardioid directivity.
-            Each driver's $a_0$ and $a_1$ coefficients were derived using the initial frequency and directivity response measurements of the ASL.
-            \begin{lstlisting}[style=Matlab-editor, gobble=16]
+            Each driver's $a_0$ and $a_1$ coefficients were derived using the initial frequency and directivity response measurements of the ACL, code used for this is shown in Listing \ref{MATLABsnippet}.
+
+            \begin{lstlisting}[style=Matlab-editor, gobble=16, caption = {MATLAB function used to calculate $a$ coefficients using measured pressure $p$.}, label = {MATLABsnippet}]
                 function [a0, a1] = Compute_a_coeff(p, beta, k, r)
                     % Hankel functions (spherical bessel functions with decay):
                     h01 = conj(-1i .* exp(1i .* k .* r) .* (1./(k.*r)));
@@ -501,25 +628,31 @@
                     a1 = ((3.*pi) ./ -(2.*k.*h11)) .* mean(p.*sin(beta).*cos(beta),2);
                 
                 end
+                
             \end{lstlisting}
             
             The resulting $a$ coefficients, while precise, were rough in envelope to the point that a closely matching filter would be unfeasible.
-            This can be seen when plotting the immediately derived $a$ coefficients, shown in Fig.\ref{acoeffsNoSmooth}.
+            This can be seen when plotting the immediately derived $a$ coefficients against frequency, shown in Fig.\ref{acoeffsNoSmooth}.
+
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/acoeffsNoSmooth.png}%
                 \caption{Real and imaginary parts of $a$ coefficients with no smoothing applied.}
                 \label{acoeffsNoSmooth}
             \end{figure}
+
             Figure \ref{acoeffsNoSmooth} plots both the real and imaginary parts of the calculated $a$ coefficients, and in the real and imaginary parts of $a_0$ and $a_1$ for both drivers, the plot is jagged with high dynamic range between 0-150Hz.
             Whilst any frequencies below 20Hz may be disregarded as inconsequential to a human listener, the 20-150Hz range is within the frequency range where the LF drivers are attempting to give a cardioid directivity.
             Thus, any smoothing applied to this region will have the trade-off of reduced precision and accuracy in the ability of the filter to match the $a$ coefficients in this crucial frequency band.
+            
             Finding a good compromise point between the amount post-measurement smoothing and required accuracy in the filter is a point for further study.
             MATLAB's \texttt{smoothdata()} function was used, on it's default setting, to smooth the $a$ coefficients.
-            MathWorks describe \texttt{smoothdata()} as a function that: `Returns a moving average of the elements of a vector using a fixed window length that is determined heuristically. The window slides down the length of the vector, computing an average over the elements within each window.' \cite{smoothdata}.
+            MathWorks describe \texttt{smoothdata()} as a function that: `Returns a moving average of the elements of a vector using a fixed window length that is determined heuristically.' \cite{smoothdata}.
+
             As the design of the correction filter follows an inverse-FFT methodology, which will be elaborated upon in a further section, only a magnitude response over frequency of the correction filter is needed.
             Therefore, only the magnitude response of the $a$ coefficients was needed to construct the correction filter that makes both $a$ coefficients magnitude equivalent over frequency; this magnitude response can be thought of as an envelope in time without any relevant frequency information, and as such a moving average filter's undesirable frequency characteristics are irrelevant \cite{smith2013digital}.
-            Figure \ref{acoeffsSmooth} shows how the moving-average filter has smoothed the $a$ coefficients enough to remove any jagged jumps but keep most of the envelope's main curves and information.
+            Figure \ref{acoeffsSmooth} shows how the moving-average filter has smoothed the $a$ coefficients enough to remove any jagged jumps but keep most of the frequency response's main curves and information.
+
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/acoeffsSmooth.png}%
@@ -529,112 +662,267 @@
 
             The frequency magnitude response of the correction filter was derived by algebraically solving for a hypothetical $\gamma$, the correction filter, across the frequency-domain magnitude of each driver's smoothed $a_0$ and $a_1$ coefficients.
             Equation \ref{gammaAlgebra} shows the magnitude of gamma at each frequency algebraically related to the $a$ coefficients of the front and rear drivers.
+
             \begin{equation}
                 \gamma = \frac{a_{0f} - a_{1f}}{a_{1r} - a_{0r}}
                 \label{gammaAlgebra}
             \end{equation}
+
             Mathematically applying $\gamma$, the derived correction filter, to the rear LF woofer and recalculating the $a_0$ and $a_1$ coefficients for each driver gives a predicted coefficient-over-frequency response shown in Fig.\ref{coeffsPredicted}.
+
             \begin{figure}[H]
                 \centering
                 \includegraphics[scale=0.35]{figs/coeffsPredicted.png}%
                 \caption{$a_0$ and $a_1$ coefficients remain equal across frequency after $\gamma$ is applied to the measured coefficients.}
                 \label{coeffsPredicted}
             \end{figure}
-            Whilst the perfectly matching $a_0$ and $a_1$ coefficients shown in Fig. \ref{coeffsPredicted} are promising, and prove the validity of the algebraic derivation $\gamma$, they are ultimately theoretical.
-            A plot of the frequency response of $\gamma$ is given in Fig.\ref{gammaMagnitude}.
-            Plots of the phase and group delay over frequency of $\gamma$ are given in Fig.\ref{grpDelay}
+
             \begin{figure}[H]
                 \centering
-                \includegraphics[scale=0.25]{figs/grpDelay.png}%
-                \caption{Phase and group delay of the correction filter $\gamma$ are as important as the frequency response.}
+                \includegraphics[width = 0.75\linewidth]{figs/grpDelay.png}%
+                \caption{Frequency response, phase response and group delay of $\gamma$.}
                 \label{grpDelay}
             \end{figure}
+
             \begin{figure}[H]
                 \centering
-                \includegraphics[scale=0.35]{figs/gammaMagnitude.png}%
-                \caption{The magnitude of $\gamma$ over frequency.}
-                \label{gammaMagnitude}
-            \end{figure}
-            \begin{figure}[H]
-                \centering
-                \includegraphics[scale=0.35]{figs/gammaCompare.png}%
+                \includegraphics[width = 0.6\linewidth]{figs/gammaCompare.png}%
                 \caption{Normalizing $\gamma$ and plotting over the entire frequency range shows the extent of noise above the relevant frequency range.}
                 \label{gammaCompare}
             \end{figure}
-            Whilst only the rough range of 20-500Hz is relevant to the LF drivers, the $a$ coefficients and thus $\gamma$ were calculated across the entire frequency range, up to the Nyquist limit, of the measurement system.
+
+            Looking to Fig. \ref{coeffsPredicted}, a perfect match can be seen, giving validity to the formulation of $\gamma$.
+            Both the real and imaginary parts of the new, combined and matching coefficients are much lower than 
+
+            Whilst the perfectly matching $a_0$ and $a_1$ coefficients shown in Fig. \ref{coeffsPredicted} are promising, and prove the validity of the algebraic derivation $\gamma$, they are ultimately theoretical.
+            Plots of the frequency response, phase response and group delay over frequency of $\gamma$ are given in Fig.\ref{grpDelay}.
+            The group delay of a filter determines the time delay that each frequency component of a filtered signal will be subject to \cite{oppenheim1999discrete} \cite{rabiner1975theory}.
+            This is an important parameter because, as Olson shows in `Gradient Loudspeakers', the delay between one loudspeaker unit and another in a unidirectional gradient loudspeaker system is a key factor in determining rear cancellation effectiveness.
+
+            Only the rough range of 20-500Hz is relevant to the LF drivers, however, the $a$ coefficients and thus $\gamma$ were calculated across the entire frequency range, up to the Nyquist limit, of the measurement system.
             Upon further inspection of the impact of gamma above 500Hz, unwanted noise and dynamic range is found in the filter, shown by the normalized $\gamma$ in Fig.\ref{gammaCompare}.
             The normalized $\gamma$ has such a degree of noise above it's relevant frequency range that the magnitude in the relevant range is almost unnoticeable.
+
             In order to eliminate this noise, $\gamma$ was weighted with the frequency response of a 4\^{th} order, 300Hz cut-off, Butterworth low-pass filter (LPF).
             Figure \ref{gammaCompare} shows the affect of the LPF on the normalized $\gamma$, all the unwanted noise is removed and the useful frequency range is unchanged, as it remains in the pass-band of the LPF.
-            This presents the next challenge: fitting a real-world implementable filter to $\gamma$.
+            This presents the next challenge: fitting a real-world implementable filter, including the LPF, to $\gamma$.
+
+            Before progressing to the next section, the amplitudes of the filter frequency response must be discussed.
+            Whilst certain plots, such as Fig. \ref{gammaCompare}, normalize the values of the frequency response magnitude coefficients, no actual normalization took place at any time to the frequency response of $\gamma$, before or after filter fitting.
 
         \subsection{Correction Filter Implementation}
-            A simple and direct way to fit an appropriate filter's magnitude response to $\gamma$ is to use the inverse-FFT method, resulting in a finite-impulse response (FIR) filter.
+            A simple, direct and effective way to fit an appropriate filter's magnitude response to $\gamma$ is to use the inverse-FFT method, resulting in a finite-impulse response (FIR) filter.
             The inverse-FFT method of FIR filter design uses an inverse-FFT algorithm to compute the time-domain impulse response of a filter from it's frequency-domain magnitude response \cite{li2019digital}.
+            
             As the time-domain impulse response is simply a single finite-length series of scalars, it may be described in the context of FIR filters as a series of $b$ coefficients, where the $a$ coefficients in the in the FIR filter are nonexistent.
             Before taking the inverse-FFT of the $\gamma$ transfer function, it must be weighted (multiplied in the frequency domain) by the LPF.
             Whilst a Butterworth-type frequency response can be manually drawn in MATLAB as an array of weighting coefficients, using MATLAB's \texttt{butter()} function provided easier tweaking of the LPF, as when calling \texttt{butter()}, properties such a filter order can be set.
             MATLAB's \texttt{butter()} generates $a$ and $b$ coefficients of an IIR Butterworth filter, as opposed the FIR desired for $\gamma$.
 
-            Whilst FIR filters are guaranteed, by their finite nature, to decay to zero as stable filters, IIR filters are not, the poles of an IIR filter can lay beyond the unit circle leading to growth instead of decay in the impulse response \cite{litwin2000fir}.
+            Whilst FIR filters are guaranteed, by their finite nature, to decay to zero as stable filters, IIR filters are not, the poles of an IIR filter can, in a pole-zero plot, lay beyond the unit circle, leading to growth instead of decay in the impulse response \cite{litwin2000fir}.
             This can be problematic, and whilst \texttt{butter()}'s design procedure ensures the LPF will be stable the guaranteed stability of FIR filters as opposed to IIR filters was a major factor in choosing to implement $\gamma$ with an FIR filter. 
-            It was also important to consider the causality of $\gamma$.
 
-            After the Butterworth LPF was generated, MATLAB's in-built texttt\ {freqz()} function was used to convert the LPF's $a$ and $b$ filter coefficients into a frequency-domain transfer function.
+            After the Butterworth LPF was generated, MATLAB's in-built \texttt{freqz()} function was used to convert the LPF's $a$ and $b$ filter coefficients into a frequency-domain transfer function.
 
             From here, the frequency-domain transfer function of the LPF was multiplied with the frequency-domain transfer function of $\gamma$, giving the weighted $\gamma$ frequency response shown in Fig.\ref{gammaCompare}.
             This simple multiplication in the frequency domain should produce no inconsistencies or invalidity of the resultant filter; multiplication in the frequency domain is the same as convolution in the time domain \cite{stanfordConvolution}.
-            All that was left from this point was to transform the new, weighted $\gamma$ into it's impulse response using an inverse FFT, such that the time-domain effects of the filter can be further investigated.
-            \\
-            As aforementioned, the inverse-FFT method of FIR filter design was ultimately used to generate a working $\gamma$ rear-driver correction filter.
-            Using MATLAB's in-built \texttt{ifft()} function requires some considerations: The convolution is CIRCULAR NOT CIRCULAR PROS AND CONS.
-
-            COMPARE PHASE GRPAHS TO OLSONS PHASE GRAPHS (FIG 3)
-            Olson:
-            delay is given as d/2 and kD/2 makes the expression frequency dependent.
-            short delay gives wide enough comb filtering such that u get 2 bumps like in olsons fig 3.
-
-
             
+            All that was left from this point was to transform the new, weighted $\gamma$ into it's impulse response using an inverse FFT, such that the time-domain effects of the filter can be further investigated.
+            The IFFT method of FIR filter design requires some considerations.
+            Taking the IFFT of a frequency response in MATLAB will result in an impulse response that is equal in length (in samples) to the frequency response.
+            As a precise and complex filter response may require a high resolution in the frequency domain, this may lead to a impractically long impulse response.
 
+            \begin{figure}[H]
+                \centering
+                \begin{minipage}{.49\textwidth}
+                    \includegraphics[width=\linewidth]{figs/tukeyWin.png}
+                    \caption{Tukey window used to shorten the FIR filter's impulse response.}
+                    \label{tukeyWin}
+                \end{minipage}
+                \begin{minipage}{.49\textwidth}
+                    \includegraphics[width=\linewidth]{figs/tukeyImpulse.png}
+                    \caption{Windowed and un-windowed impulse responses.}
+                    \label{tukeyImpulse}
+                \end{minipage}
+            \end{figure}
 
-            The generated impulse response, shown in Fig., is non-causal, with a substantial section wrapped back around $t=0$ to the end of the response.
+            The generated impulse response, shown in Fig. \ref{tukeyImpulse}, is non-causal and impractically long, with a substantial section wrapped back around $t=0$ to the end of the response, and an increase in amplitude towards the end instead of a continuous trend toward zero.
             This generated audible artifacts and ringing when convolved with any audio signal and played back.
-            Thus, the impulse response of the filter was processed to eliminate this non-causality, but preserve it's original frequency and phase characteristics.
-            Using MATLAB's \texttt(tukeywin()) function, a window tending zero at it's stop bands was used to keep the useful section of the impulse response and discard the `tail' of the impulse response.
-            A brief investigation into the relationship between the width of the window and the error between the windowed impulse response's frequency response and the original impulse response's frequency response was carried out.
 
-            Certain interactions between the front ad rear drivers will require the rear driver
+            Thus, the impulse response of the filter was processed to eliminate these problematic characteristics, but preserve it's original frequency and phase characteristics.
+            Using MATLAB's \texttt(tukeywin()) function, a window tending towards zero at it's stop bands, was used to keep the useful section of the impulse response and discard the `tail' of the impulse response.
 
-    \section{Measurement Revisited, Post Filtering}
+            A brief investigation into the relationship between the width of the window and the error between the windowed impulse response's frequency response and the original impulse response's frequency response was carried out; a window length of 2000 samples was deemed a good compromise between impulse response length and introduced error.
 
-        \begin{figure}[H]
-            \begin{minipage}{.49\textwidth}
-                \includegraphics[width=\linewidth]{figs/filteredaCoeffNoSmooth.png}
+            An FFT of the new, windowed FIR filter impulse response was taken in order to analyze it's frequency and phase performance.
+            The phase of the filter, shown in Fig. \ref{tukeyPhase} shows a shift across all frequencies in a similar fashion to the original, longer impulse, almost perfectly matching in the relevant frequency range of the filter.
+            This shift however, is not linear and should serve to adjust the phase relationship between the front and rear driver radiation such that sufficient rear cancellation is achieved across the frequency range of the LF drivers.
+
+            Thankfully, a good match in frequency response is also found.
+            However, significant smoothing in the sub 100Hz frequency response of the windowed FIR is found, which may lead to a loss in correction precision at these lower frequencies.
+            Peaks above the 1000Hz range are also smoothed, but this is beyond the intended range of the filter and is found well past the cut-off of the LPF.
+
+            All in all, the analyzed performance of the windowed FIR correction filter, now the new $\gamma$, was found to be satisfactory.
+            However, real-world testing of the filter's impact on combined ACL LF directivity will ultimately determine if the filter, or the theory it is based on, is suitable.
+            
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.7\linewidth]{figs/tukeyFrequency.png}
+                \caption{The frequency response discrepancy between the windowed and un-windowed FIR filter.}
+                \label{tukeyFrequency}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.7\linewidth]{figs/tukeyPhase.png}
+                \caption{The phase response discrepancy between windowed and un-windowed FIR filter.}
+                \label{tukeyPhase}
+            \end{figure}
+
+            \newpage
+
+    \section{Post-Filtering Directivity Measurements}
+            When initially measuring the directivity over frequency of the ACL, swept sine wave excitation signals were fed to all three driver separately.
+            However, to analyze the performance of the \textit{combined} LF directivity with the correction filter $\gamma$ applied, the Uni-Q mid-high became irrelevant and as so was not measured a second time.
+            The same swept sine test signal was kept, however this time both front and rear LF drivers were fed at the same time, as opposed to the consecutive sweeps of the first test.
+            The swept sine fed to the rear driver was convolved with $\gamma$, but the signal fed to the front LF driver remained the same as in the first test.
+            
+            Apart from the aforementioned differences in test signal play out and included drivers, the testing procedure remained much the same as in Section 4.1.
+
+            It should be noted that at this point in the project, multiple laboratory sessions were required to generate working measurement code and take effective measurements. 
+            MATLAB and the general signal chain were delicate, and whilst efforts were made by the Supervisor and Author to automatically re-measure corrupted or problematic measurements, this simply served to complicate the measurement process.
+            Thus both this second round of testing, as with the first, had problematic data which needed to be manually identified and smoothed out by averaging a problematic angle's frequency response out with it's neighbors.
+            Errors and bad data usually took the form of audio-buffer dropouts, caused either by MATLAB's handling of the system's audio buffer, the ASIO drivers themselves, or some other unknown error.
+            These audio dropouts introduced significant noise or error into any angle's frequency response measurement they were present in, mostly to the point where the resulting data from that angle was unusable.
+            
+            It is possible that some minor playback error went unnoticed, and is even suggested by the notch at roughly 120 degrees on the polar plot of 200Hz combined directivity shown in Fig. \ref{filteredCombinedDirectivity}.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale = 0.3]{figs/filteredaCoeffNoSmooth.png}
                 \caption{Un-smoothed $a$ coefficients of the combined response of the front driver and filtered rear driver.}
                 \label{filteredaCoeffNoSmooth}
-            \end{minipage}
-            \begin{minipage}{.49\textwidth}
-                \includegraphics[width=\linewidth]{figs/filteredaCoeffsSmoothed.png}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale = 0.3]{figs/filteredaCoeffsSmoothed.png}
                 \caption{Smoothed $a$ coefficients of the combined response of the front driver and filtered rear driver.}
                 \label{filteredaCoeffsSmoothed}
-            \end{minipage}
-        \end{figure}
+            \end{figure}
+            
+            Again, using the code in Listing \ref{MATLABsnippet}, $a$ coefficients were calculated from the directivity functions of the combined loudspeaker.
+            Plots of these coefficients are seen in Figs. \ref{filteredaCoeffNoSmooth} and \ref{filteredaCoeffsSmoothed}.
+            Whilst these plots do not exactly match the mathematical prediction plotted in Fig. \ref{coeffsPredicted}, they do show a good degree of `following' behavior between the coefficients.
+            That is, the combined response coefficients follow similar patterns across frequency and deviate much less than the plots in Fig. \ref{acoeffsSmooth}.
 
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.7\linewidth]{figs/filteredCombinedDirectivity.png}
-            \caption{Filtering the rear and measuring the combined system has shown some change in directivity response.}
-            \label{filteredCombinedDirectivity}
-        \end{figure}
+            The dramatic lowering in absolute value of coefficients shown by the predictions in Fig. \ref{coeffsPredicted} did not manifest; the absolute values of the $a$ coefficients pre and post filtering remain in similar magnitude bands.
+            However, it cannot be expected that real-world performance will perfectly mirror a simple algebraic solution that makes a great deal of assumptions.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/filteredCombinedDirectivity.png}
+                \caption{Filtering the rear and measuring the combined system has shown some change in directivity response.}
+                \label{filteredCombinedDirectivity}
+            \end{figure}
+
+            Figure \ref{filteredCombinedDirectivity} depicts the combined directivity response of the LF drivers over a range of frequencies.
+            It is clear to see that at particular frequencies (200Hz, 300Hz), a fairly cardioid directivity pattern is reached with clear rejection at 180 degrees, the rear of the ACL.
+            Whilst other frequencies do not have as `cardioid' a polar pattern, every plot that crosses the 0.4-magnitude line of the polar, crosses it only in the on-axis (0 degrees) region.
+            Thus, some degree of rear rejection across all frequencies, at least compared to the on-axis radiation, is achieved.
+
+            Comparing the directivity at 200Hz to Vedier's polar plot in Fig. \ref{vedierPolar} an almost half-way point is reached, by the combined directivity, between the polar patterns of the presented analytical and FEM solutions.
+            Remembering that Vedier's simulations did not account for the coaxial mounting of the Uni-Q, some discrepancy is to be expected.
+            However, it's hard to explain why exactly the discrepancy took the form it did.
+
+            The polar plot of Olson's first-order unidirectional gradient loudspeaker, seen in Fig. \ref{olsonFirstOrderDirectivity}, is much more optimistic and ideally cardioid, matching the polar pattern typically given by a cardioid microphone.\pdfcomment{Should I expand on this?}
+
+            Non-cardioid features of the polar plots in Fig. \ref{filteredCombinedDirectivity} may be explained by the residual, higher spherical harmonic order, pressure $R$, found in in Eq. \ref{sphericalPressure}.
+            To investigate the contributions of $R$ using Eq. \ref{sphericalPressure}, a far-field assumption of monopole-like decay must be applied to the higher order spherical harmonics, as was applied to the lower-order spherical harmonics \cite{hargreaves}.
+            This may prove difficult or unwieldy, so the residual will be calculated in terms of the measured radius of the pressure radiation.
+
+            \begin{equation}
+                R_{meas}(\beta,\alpha,\omega) = p_{meas}(r_{meas},\beta,\alpha,\omega) - ikh_0^{(1)}(kr{meas}) \times a_0(\omega) + kh_1^{(1)}(kr{meas}) \times a_1(\omega)\cite{hargreaves}
+                \label{residualEquation}
+            \end{equation}
+
+            Equation \ref{residualEquation} shows that by multiplying each $a$ coefficient by the Hankel function used to form it, the residual pressure as a result of higher-order spherical harmonics $R$ can be calculated.
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/residual100.png}
+                \caption{Residual Directivity at 100Hz}
+                \label{residual100}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/residual200.png}
+                \caption{Residual Directivity at 200Hz}
+                \label{residual200}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/residual600.png}
+                \caption{Residual Directivity at 600Hz}
+                \label{residual600}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/residual1000.png}
+                \caption{Residual Directivity at 1000Hz}
+                \label{residual1000}
+            \end{figure}
+
+            The residual pressure information, shown by Figs. \ref{residual100}, \ref{residual200}, \ref{residual600} and \ref{residual1000}, does not particularly deviate from the total measured pressure in the far-field.
+            This may be due to a minimal contribution of higher order spherical harmonics, which is unlikely, or an error in calculation of the residual $R$.
+            MORE MORE MORE MORE
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\linewidth]{figs/combined139.png}
+                \caption{Combined Directivity at 139Hz, of which distance between drivers, 0.64m is a quarter-wavelength.}
+                \label{combined139}
+            \end{figure}
+
+
 
 \chapter{Discussion and Conclusions}
+    A coeffs hold and show promise.
+
+    Not perfectly cardioid, quarter wavelgnth cabinet length concept holds?
+
+    axisymmetry and cardioid directivity shown by literature to be good property
+
+    Improvements to be made to testing methodology and scope of project
+
+    less time matlabbin
+        
 
 \chapter{Further Work}
     A-coeff smoothing investigation.
+
     Driver model suitability
+
     length of coupled chamber
+
     cavity resonances ala KEF
+
+    Integrating the correction filter, or a prospective improved correction filter with a more integrated crossover filter.
+
+    Subjective listening tests.
+
+    Repeats and statistical analysis.
+
+    Investigation into efficiency savings of acoustic coupled chamber a la cheers paper.
+
+    Investigation into different `direct radiator' cabinet types a la olson.
+    
+    Using laser doppler vibrometer to investigate cabinet resonances.
+
+    Designing integrated digital crossover / amplifications system
 
 \bibliographystyle{IEEEtran}
 \bibliography{theBib.bib}
